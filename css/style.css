@@ -263,7 +263,7 @@ h1, h2, h3 { font-family: var(--serif); font-style: italic; }
   justify-content: center;
   text-align: center;
   position: relative;
-  background: var(--dark2);
+  background: var(--dark2) url('../images/hero.png') center center / cover no-repeat;
   overflow: hidden;
 }
 .hero-pattern {
