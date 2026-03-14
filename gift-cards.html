@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gift Cards | Trittico Ristorante</title>
+  <meta name="description" content="Buy a Trittico Ristorante gift card — the perfect gift for any occasion. No expiry date. Hackham, Adelaide." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<!-- HERO -->
+<section class="page-hero" style="position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,#C9A84C 0,#C9A84C 1px,transparent 0,transparent 50%);background-size:20px 20px;opacity:0.05;"></div>
+  <div style="position:relative;z-index:1;">
+    <div style="font-size:4rem;margin-bottom:1rem;">🎁</div>
+    <span class="section-label">The Perfect Gift</span>
+    <h1>Gift Cards</h1>
+    <div class="gold-bar"></div>
+    <p>Give the gift of authentic Italian dining. No expiry date &mdash; valid for dine-in, takeaway, and online orders.</p>
+  </div>
+</section>
+
+<!-- MAIN -->
+<section class="section" style="background:var(--cream);">
+  <div class="section-inner">
+    <div class="grid-2" style="align-items:start;gap:4rem;">
+
+      <!-- LEFT: Preview + Features -->
+      <div>
+        <!-- Card Preview -->
+        <div class="gift-card-preview mb-3" id="card-preview">
+          <div class="gift-card-inner">
+            <div class="gift-card-header">
+              <div>
+                <div class="gift-card-logo">Trittico</div>
+                <div class="gift-card-logo-sub">Ristorante</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="gift-card-amount-label">Gift Card Value</div>
+                <div class="gift-card-amount" id="preview-amount">$50</div>
+              </div>
+            </div>
+            <div>
+              <div class="gift-card-recipient" id="preview-recipient">Recipient&rsquo;s name will appear here</div>
+              <div class="gift-card-message" id="preview-message" style="display:none;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Features -->
+        <div class="gift-features">
+          <div class="gift-feature">
+            <div class="gift-feature-icon">✉️</div>
+            <div><p class="gift-feature-title">Emailed Directly</p><p class="gift-feature-desc">Gift card sent to recipient via email within 24 hours of purchase.</p></div>
+          </div>
+          <div class="gift-feature">
+            <div class="gift-feature-icon">♾️</div>
+            <div><p class="gift-feature-title">No Expiry Date</p><p class="gift-feature-desc">Valid forever &mdash; use it at any time, no rush.</p></div>
+          </div>
+          <div class="gift-feature">
+            <div class="gift-feature-icon">🍝</div>
+            <div><p class="gift-feature-title">Valid for Everything</p><p class="gift-feature-desc">Dine-in, takeaway, drinks &mdash; covers the full menu.</p></div>
+          </div>
+          <div class="gift-feature">
+            <div class="gift-feature-icon">🔒</div>
+            <div><p class="gift-feature-title">Secure Payment</p><p class="gift-feature-desc">Processed securely via Stripe. Major cards accepted.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Form -->
+      <div class="reservation-form" id="gc-form-wrap">
+        <h2 style="font-size:1.6rem;margin-bottom:0.25rem;color:var(--dark);">Purchase a Gift Card</h2>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.75rem;">Choose an amount, fill in the details, and pay securely via Stripe.</p>
+
+        <form id="gc-form">
+          <!-- Amount -->
+          <div class="form-group">
+            <label class="form-label">Select Amount *</label>
+            <div class="amount-grid" id="amount-grid">
+              <button type="button" class="amount-btn" data-amount="25">$25</button>
+              <button type="button" class="amount-btn active" data-amount="50">$50</button>
+              <button type="button" class="amount-btn" data-amount="75">$75</button>
+              <button type="button" class="amount-btn" data-amount="100">$100</button>
+              <button type="button" class="amount-btn" data-amount="150">$150</button>
+              <button type="button" class="amount-btn" data-amount="200">$200</button>
+            </div>
+            <div class="custom-amount mt-2">
+              <span class="custom-amount-prefix">$</span>
+              <input type="number" id="custom-amount" min="10" max="1000" placeholder="Custom amount" style="padding:0.75rem 0.5rem;border:none;outline:none;font-size:0.95rem;flex:1;" />
+            </div>
+          </div>
+
+          <!-- Recipient -->
+          <div class="gift-form-section">
+            <div class="gift-form-heading">Recipient Details</div>
+            <div class="form-group">
+              <label class="form-label" for="rec-name">Recipient&rsquo;s Name *</label>
+              <input type="text" id="rec-name" class="form-input" placeholder="e.g. Sarah Smith" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="rec-email">Recipient&rsquo;s Email *</label>
+              <input type="email" id="rec-email" class="form-input" placeholder="sarah@example.com" required />
+            </div>
+          </div>
+
+          <!-- Sender -->
+          <div class="gift-form-section">
+            <div class="gift-form-heading">From You</div>
+            <div class="form-group">
+              <label class="form-label" for="sender-name">Your Name *</label>
+              <input type="text" id="sender-name" class="form-input" placeholder="e.g. John Smith" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="gc-message">Personal Message (optional)</label>
+              <textarea id="gc-message" class="form-input form-textarea" rows="3" placeholder="Happy birthday! Enjoy a beautiful Italian dinner..." style="resize:none;"></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="checkout-btn" id="gc-submit">Buy $50 Gift Card</button>
+          <p class="cart-stripe-note" style="margin-top:0.75rem;">🔒 Secure checkout via Stripe. All major cards accepted.</p>
+        </form>
+
+        <!-- Setup note -->
+        <div style="margin-top:1.25rem;padding:0.75rem 1rem;background:var(--cream);border-radius:2px;border-left:3px solid var(--gold);">
+          <p style="font-size:0.75rem;color:var(--muted);line-height:1.6;">
+            <strong style="color:var(--dark);">Setup required:</strong>
+            Create Stripe Payment Links for each denomination at
+            <a href="https://dashboard.stripe.com/payment-links" target="_blank" rel="noopener" style="color:var(--red);">dashboard.stripe.com</a>
+            and replace the placeholder URLs in <code>js/gift-cards.js</code>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="background:var(--dark);">
+  <div class="section-inner" style="max-width:700px;">
+    <div class="section-header light">
+      <h2>Gift Card FAQs</h2>
+      <div class="gold-bar"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div style="padding:1.25rem;background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.15);border-radius:2px;">
+        <p style="color:var(--gold);font-weight:600;margin-bottom:0.5rem;">When will the recipient receive their gift card?</p>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.85rem;line-height:1.7;">Gift cards are emailed within 24 hours of purchase. For urgent gifts, call us on (08) 8381 3446.</p>
+      </div>
+      <div style="padding:1.25rem;background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.15);border-radius:2px;">
+        <p style="color:var(--gold);font-weight:600;margin-bottom:0.5rem;">Do gift cards expire?</p>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.85rem;line-height:1.7;">No &mdash; our gift cards have no expiry date and can be used any time.</p>
+      </div>
+      <div style="padding:1.25rem;background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.15);border-radius:2px;">
+        <p style="color:var(--gold);font-weight:600;margin-bottom:0.5rem;">Can I buy a gift card in-store?</p>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.85rem;line-height:1.7;">Yes! Visit us at 154 Main South Rd, Hackham, or call (08) 8381 3446 to arrange a physical gift card.</p>
+      </div>
+      <div style="padding:1.25rem;background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.15);border-radius:2px;">
+        <p style="color:var(--gold);font-weight:600;margin-bottom:0.5rem;">What if I spend less than the gift card value?</p>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.85rem;line-height:1.7;">Any remaining balance stays on the card for your next visit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script>
+document.getElementById('navbar') && document.getElementById('navbar').classList.add('solid');
+
+// === STRIPE PAYMENT LINKS per denomination ===
+// Create these at https://dashboard.stripe.com/payment-links
+// Replace each URL with your actual Stripe Payment Link
+var STRIPE_LINKS = {
+  25:  'https://buy.stripe.com/YOUR_LINK_FOR_25',
+  50:  'https://buy.stripe.com/YOUR_LINK_FOR_50',
+  75:  'https://buy.stripe.com/YOUR_LINK_FOR_75',
+  100: 'https://buy.stripe.com/YOUR_LINK_FOR_100',
+  150: 'https://buy.stripe.com/YOUR_LINK_FOR_150',
+  200: 'https://buy.stripe.com/YOUR_LINK_FOR_200',
+  custom: 'https://buy.stripe.com/YOUR_CUSTOM_AMOUNT_LINK',
+};
+
+var selectedAmount = 50;
+
+// Amount buttons
+document.querySelectorAll('.amount-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.amount-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    selectedAmount = parseInt(btn.dataset.amount);
+    document.getElementById('custom-amount').value = '';
+    updatePreviewAmount();
+  });
+});
+
+// Custom amount
+document.getElementById('custom-amount').addEventListener('input', function() {
+  if (this.value) {
+    document.querySelectorAll('.amount-btn').forEach(function(b){ b.classList.remove('active'); });
+    selectedAmount = parseInt(this.value) || 0;
+    updatePreviewAmount();
+  }
+});
+
+function updatePreviewAmount() {
+  var el = document.getElementById('preview-amount');
+  if (el) el.textContent = selectedAmount ? '$' + selectedAmount : '$—';
+  var btn = document.getElementById('gc-submit');
+  if (btn) btn.textContent = selectedAmount ? 'Buy $' + selectedAmount + ' Gift Card' : 'Select an Amount';
+}
+
+// Live preview
+document.getElementById('rec-name').addEventListener('input', function() {
+  var el = document.getElementById('preview-recipient');
+  if (el) el.textContent = this.value ? 'For: ' + this.value : 'Recipient\'s name will appear here';
+});
+document.getElementById('gc-message').addEventListener('input', function() {
+  var el = document.getElementById('preview-message');
+  if (!el) return;
+  if (this.value) { el.textContent = '\u201c' + this.value + '\u201d'; el.style.display = 'block'; }
+  else { el.style.display = 'none'; }
+});
+
+// Submit
+document.getElementById('gc-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  if (!selectedAmount || selectedAmount < 10) { alert('Minimum gift card amount is $10.'); return; }
+  // Get Stripe link
+  var link = STRIPE_LINKS[selectedAmount] || STRIPE_LINKS.custom;
+  // Open Stripe payment link
+  window.open(link, '_blank', 'noopener');
+});
+</script>
+</body>
+</html>

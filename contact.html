@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact &amp; Reservations | Trittico Ristorante</title>
+  <meta name="description" content="Contact Trittico Ristorante — make a reservation, find our hours, location, and get in touch." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <span class="section-label">Get in Touch</span>
+  <h1>Contact Us</h1>
+  <div class="gold-bar"></div>
+</section>
+
+<!-- MAIN CONTENT -->
+<section class="section" style="background:var(--cream);">
+  <div class="section-inner">
+    <div class="grid-2" style="gap:3rem;align-items:start;">
+
+      <!-- LEFT: Info + Hours -->
+      <div>
+        <!-- Contact details -->
+        <h2 style="font-size:1.6rem;color:var(--dark);margin-bottom:1.5rem;">Find Us</h2>
+        <div class="contact-info-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <p class="contact-info-label">Address</p>
+            <p class="contact-info-value"><a href="https://maps.google.com/?q=154+Main+South+Rd+Hackham+SA+5163" target="_blank" rel="noopener">154 Main South Rd, Hackham SA 5163</a></p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <p class="contact-info-label">Phone</p>
+            <p class="contact-info-value"><a href="tel:+61883813446">(08) 8381 3446</a></p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <p class="contact-info-label">Email</p>
+            <p class="contact-info-value"><a href="mailto:info@tritticoristorante.com">info@tritticoristorante.com</a></p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">📸</div>
+          <div>
+            <p class="contact-info-label">Instagram</p>
+            <p class="contact-info-value"><a href="https://www.instagram.com/trittico_ristorante/" target="_blank" rel="noopener">@trittico_ristorante</a></p>
+          </div>
+        </div>
+
+        <!-- Hours -->
+        <h2 style="font-size:1.6rem;color:var(--dark);margin:2rem 0 1rem;">Opening Hours</h2>
+        <div class="hours-table" id="hours-table">
+          <!-- Rendered by JS below -->
+        </div>
+        <p style="font-size:0.72rem;color:var(--muted);margin-top:0.75rem;">* Hours may vary on public holidays. Please call ahead.</p>
+
+        <!-- Map link -->
+        <h2 style="font-size:1.6rem;color:var(--dark);margin:2rem 0 1rem;">Getting Here</h2>
+        <a href="https://maps.google.com/?q=154+Main+South+Rd+Hackham+SA+5163" target="_blank" rel="noopener" class="map-placeholder" style="display:block;text-decoration:none;">
+          <div>
+            <div class="map-pin">📍</div>
+            <p class="map-addr">154 Main South Rd, Hackham SA</p>
+            <p class="map-hint">Click to open in Google Maps</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- RIGHT: Reservation form -->
+      <div class="reservation-form" id="res-form-wrap">
+        <h2 style="font-size:1.6rem;margin-bottom:0.4rem;color:var(--dark);">Make a Reservation</h2>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.75rem;">Reserve your table or send us a message. We&rsquo;ll confirm within 24 hours.</p>
+
+        <form id="res-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="r-name">Full Name *</label>
+              <input type="text" id="r-name" class="form-input" placeholder="John Smith" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="r-phone">Phone *</label>
+              <input type="tel" id="r-phone" class="form-input" placeholder="04xx xxx xxx" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="r-email">Email *</label>
+            <input type="email" id="r-email" class="form-input" placeholder="john@example.com" required />
+          </div>
+          <div class="form-row" style="grid-template-columns:1fr 1fr 1fr;">
+            <div class="form-group">
+              <label class="form-label" for="r-date">Date *</label>
+              <input type="date" id="r-date" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="r-time">Time *</label>
+              <select id="r-time" class="form-input form-select" required>
+                <option value="">Select</option>
+                <option>11:30am</option><option>12:00pm</option><option>12:30pm</option>
+                <option>1:00pm</option><option>1:30pm</option><option>5:30pm</option>
+                <option>6:00pm</option><option>6:30pm</option><option>7:00pm</option>
+                <option>7:30pm</option><option>8:00pm</option><option>8:30pm</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="r-guests">Guests *</label>
+              <select id="r-guests" class="form-input form-select">
+                <option>1 Guest</option><option selected>2 Guests</option><option>3 Guests</option>
+                <option>4 Guests</option><option>5 Guests</option><option>6 Guests</option>
+                <option>7 Guests</option><option>8 Guests</option><option>9 Guests</option><option>10+ Guests</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="r-notes">Special Requests</label>
+            <textarea id="r-notes" class="form-input form-textarea" rows="4" placeholder="Dietary requirements, special occasions, high chairs, etc." style="resize:none;"></textarea>
+          </div>
+          <button type="submit" class="checkout-btn">Request Reservation</button>
+          <p style="text-align:center;font-size:0.78rem;color:var(--muted);margin-top:0.75rem;">
+            Or call us directly: <a href="tel:+61883813446" style="color:var(--red);font-weight:600;">(08) 8381 3446</a>
+          </p>
+        </form>
+
+        <!-- Success state (hidden) -->
+        <div class="form-success" id="res-success" style="display:none;">
+          <div class="form-success-icon">✅</div>
+          <h3>Grazie!</h3>
+          <p>Your reservation request has been received. We&rsquo;ll be in touch shortly to confirm your booking.</p>
+          <p style="margin-top:1rem;font-size:0.82rem;color:var(--muted);">
+            Questions? Call us on <a href="tel:+61883813446" style="color:var(--red);">(08) 8381 3446</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script>
+document.getElementById('navbar') && document.getElementById('navbar').classList.add('solid');
+
+// ----- Opening hours with today highlight -----
+var HOURS = [
+  { day: 'Monday',    time: null },
+  { day: 'Tuesday',   time: '11:30am \u2013 9:00pm' },
+  { day: 'Wednesday', time: '11:30am \u2013 9:00pm' },
+  { day: 'Thursday',  time: '11:30am \u2013 9:00pm' },
+  { day: 'Friday',    time: '11:30am \u2013 10:00pm' },
+  { day: 'Saturday',  time: '8:00am \u2013 10:00pm' },
+  { day: 'Sunday',    time: '8:00am \u2013 3:00pm' },
+];
+var todayName = new Date().toLocaleDateString('en-AU', { weekday: 'long' });
+var ht = document.getElementById('hours-table');
+if (ht) {
+  ht.innerHTML = HOURS.map(function(h) {
+    var isToday = h.day === todayName;
+    return '<div class="hours-row' + (isToday ? ' today' : '') + '">' +
+      '<span class="hours-row-day">' + h.day + (isToday ? '<span class="today-badge">Today</span>' : '') + '</span>' +
+      '<span class="hours-row-time' + (h.time ? '' : ' closed') + '">' + (h.time || 'Closed') + '</span>' +
+      '</div>';
+  }).join('');
+}
+
+// Set min date to today
+var rd = document.getElementById('r-date');
+if (rd) rd.min = new Date().toISOString().split('T')[0];
+
+// ----- Reservation form submit -----
+// Using Formspree (free) — replace YOUR_FORMSPREE_ID with your form ID from formspree.io
+var FORMSPREE_URL = 'https://formspree.io/f/YOUR_FORMSPREE_ID';
+
+document.getElementById('res-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var btn = this.querySelector('button[type=submit]');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  var data = {
+    name:    document.getElementById('r-name').value,
+    phone:   document.getElementById('r-phone').value,
+    email:   document.getElementById('r-email').value,
+    date:    document.getElementById('r-date').value,
+    time:    document.getElementById('r-time').value,
+    guests:  document.getElementById('r-guests').value,
+    notes:   document.getElementById('r-notes').value,
+    _subject:'New Reservation Request — Trittico Ristorante',
+  };
+
+  fetch(FORMSPREE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(data),
+  }).then(function(res) {
+    if (res.ok) {
+      document.getElementById('res-form').style.display = 'none';
+      document.getElementById('res-success').style.display = 'block';
+    } else {
+      alert('Sorry, something went wrong. Please call us on (08) 8381 3446 to make a reservation.');
+      btn.textContent = 'Request Reservation';
+      btn.disabled = false;
+    }
+  }).catch(function() {
+    alert('Sorry, something went wrong. Please call us on (08) 8381 3446 to make a reservation.');
+    btn.textContent = 'Request Reservation';
+    btn.disabled = false;
+  });
+});
+</script>
+</body>
+</html>

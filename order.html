@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Online | Trittico Ristorante</title>
+  <meta name="description" content="Order online from Trittico Ristorante — pickup or dine in. Pay securely via Stripe." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<!-- HERO -->
+<section class="page-hero" style="padding-bottom:2rem;">
+  <span class="section-label">Trittico Ristorante</span>
+  <h1>Order Online</h1>
+  <div class="gold-bar"></div>
+  <p>Build your order, then pay securely online or call us to confirm.</p>
+  <div class="order-type-bar">
+    <button class="order-type-btn active" data-type="pickup">🥡 Pickup</button>
+    <button class="order-type-btn" data-type="dine-in">🍽️ Dine In</button>
+  </div>
+</section>
+
+<!-- CATEGORY TABS -->
+<div class="menu-tabs-bar">
+  <div class="menu-tabs" id="order-tabs">
+    <!-- rendered by cart.js -->
+  </div>
+</div>
+
+<!-- ORDER LAYOUT -->
+<div class="order-layout" style="background:var(--cream);">
+  <!-- Items grid -->
+  <div>
+    <div class="order-items-grid" id="items-grid">
+      <!-- rendered by cart.js -->
+    </div>
+  </div>
+
+  <!-- Cart sidebar -->
+  <div class="cart-sidebar">
+    <div class="cart-title">
+      Your Order
+      <span class="cart-count" id="cart-count" style="display:none;">0</span>
+    </div>
+    <div id="cart-body">
+      <div class="cart-empty">
+        <div class="cart-empty-icon">🛒</div>
+        <p>Your cart is empty.<br>Add items to get started!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE CART BAR -->
+<div class="mobile-cart-bar" id="mobile-cart-bar" style="display:none;"></div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal" style="position:relative;" id="modal-content">
+    <!-- rendered by cart.js -->
+  </div>
+</div>
+
+<!-- STRIPE SETUP NOTE (shown when placeholder link not yet set) -->
+<section class="section" style="background:var(--dark2);padding:2rem 1.5rem;">
+  <div style="max-width:700px;margin:0 auto;text-align:center;">
+    <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;line-height:1.7;">
+      <strong style="color:var(--gold);">To activate online payment:</strong>
+      Create a Stripe Payment Link at
+      <a href="https://dashboard.stripe.com/payment-links" target="_blank" rel="noopener" style="color:var(--gold);">dashboard.stripe.com/payment-links</a>
+      and replace the placeholder URL in <code style="color:var(--gold);">js/cart.js</code>.
+      Until then, customers can call <a href="tel:+61883813446" style="color:var(--gold);">(08) 8381 3446</a> to place orders.
+    </p>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script src="js/cart.js"></script>
+<script>
+  document.getElementById('navbar') && document.getElementById('navbar').classList.add('solid');
+  // Show cart count badge when >0
+  var origRenderSidebar = renderSidebar;
+  document.addEventListener('DOMContentLoaded', function() {
+    var orig = window.updateUI;
+    var cc = document.getElementById('cart-count');
+    setInterval(function() {
+      var c = getCount ? getCount() : 0;
+      if(cc) { cc.textContent = c; cc.style.display = c > 0 ? 'flex' : 'none'; }
+    }, 100);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu | Trittico Ristorante</title>
+  <meta name="description" content="Full menu at Trittico Ristorante — pasta, pizza, mains, desserts and more. Hackham, Adelaide." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<!-- HERO -->
+<section class="page-hero" style="padding-bottom:2rem;">
+  <span class="section-label">Trittico Ristorante</span>
+  <h1>Our Menu</h1>
+  <div class="gold-bar"></div>
+  <p>All dishes are prepared fresh daily. Seasonal specials available — ask your server.<br>Prices include GST. Allergen info available on request.</p>
+  <div class="dietary-key">
+    <span class="tag tag-v">V &mdash; Vegetarian</span>
+    <span class="tag tag-vg">VG &mdash; Vegan</span>
+    <span class="tag tag-gf">GF &mdash; Gluten Free</span>
+  </div>
+</section>
+
+<!-- TABS -->
+<div class="menu-tabs-bar">
+  <div class="menu-tabs">
+    <button class="menu-tab active" data-tab="starters">Starters</button>
+    <button class="menu-tab" data-tab="soups">Soups &amp; Salads</button>
+    <button class="menu-tab" data-tab="pasta">Pasta</button>
+    <button class="menu-tab" data-tab="pizza">Pizza</button>
+    <button class="menu-tab" data-tab="mains">Mains</button>
+    <button class="menu-tab" data-tab="kids">Kids</button>
+    <button class="menu-tab" data-tab="desserts">Desserts</button>
+    <button class="menu-tab" data-tab="drinks">Drinks</button>
+  </div>
+</div>
+
+<!-- PANELS -->
+<div class="menu-section">
+  <!-- Starters -->
+  <div class="menu-panel active" id="tab-starters">
+    <div class="menu-section-inner">
+      <h2 class="menu-section-title">Starters</h2>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Garlic Bread</span><span class="tag tag-v">V</span></div><p class="menu-item-desc">Garlic buttered ciabatta bread</p></div><span class="menu-item-price">$8</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Bruschetta al Pomodoro</span><span class="tag tag-v">V</span><span class="tag tag-vg">VG</span></div><p class="menu-item-desc">Toasted sourdough, fresh Roma tomatoes, basil, extra virgin olive oil</p></div><span class="menu-item-price">$14</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Arancini Trio</span></div><p class="menu-item-desc">Three Italian rice balls — choose Bolognese, mushroom, or pumpkin</p></div><span class="menu-item-price">$22</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Caprese Salad</span><span class="tag tag-v">V</span><span class="tag tag-gf">GF</span></div><p class="menu-item-desc">Buffalo mozzarella, heirloom tomatoes, fresh basil, balsamic glaze</p></div><span class="menu-item-price">$18</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Calamari Fritti</span></div><p class="menu-item-desc">Lightly crumbed calamari, served with aioli and lemon</p></div><span class="menu-item-price">$20</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Antipasto Board</span></div><p class="menu-item-desc">Selection of cured meats, artisan cheeses, olives and house pickles (serves 2)</p></div><span class="menu-item-price">$32</span></div>
+    </div>
+  </div>
+  <!-- Soups & Salads -->
+  <div class="menu-panel" id="tab-soups">
+    <div class="menu-section-inner">
+      <h2 class="menu-section-title">Soups &amp; Salads</h2>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Zuppa del Giorno</span><span class="tag tag-v">V</span></div><p class="menu-item-desc">Chef&rsquo;s soup of the day, served with crusty bread</p></div><span class="menu-item-price">$14</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Caesar Salad</span></div><p class="menu-item-desc">Cos lettuce, house dressing, parmesan, croutons, and crispy pancetta</p></div><span class="menu-item-price">$18</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Insalata Mista</span><span class="tag tag-v">V</span><span class="tag tag-vg">VG</span><span class="tag tag-gf">GF</span></div><p class="menu-item-desc">Mixed seasonal greens, cherry tomatoes, cucumber, olives, house vinaigrette</p></div><span class="menu-item-price">$15</span></div>
+    </div>
+  </div>
+  <!-- Pasta -->
+  <div class="menu-panel" id="tab-pasta">
+    <div class="menu-section-inner">
+      <h2 class="menu-section-title">Pasta</h2>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Lasagna Bolognese</span></div><p class="menu-item-desc">Layers of pasta, homemade slow-cooked Bolognese, mozzarella &amp; parmesan</p></div><span class="menu-item-price">$22</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Spaghetti Mare</span></div><p class="menu-item-desc">Spaghetti with mixed seafood, fresh tomatoes, white wine, and a hint of chilli</p></div><span class="menu-item-price">$35</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Penne al Pollo</span></div><p class="menu-item-desc">Penne with chicken, mushroom, pancetta &amp; parmesan in ros&eacute; sauce</p></div><span class="menu-item-price">$26</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Ravioli Italiani</span><span class="tag tag-v">V</span></div><p class="menu-item-desc">House-made spinach and ricotta ravioli, creamy roasted pumpkin and spinach sauce</p></div><span class="menu-item-price">$28</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Gnocchi della Casa</span><span class="tag tag-v">V</span><span class="tag tag-gf">GF</span></div><p class="menu-item-desc">Potato gnocchi, fresh tomato sauce, parmesan cheese &amp; basil oil</p></div><span class="menu-item-price">$24</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Orecchiette Calabrese</span></div><p class="menu-item-desc">Orecchiette with spicy Calabrese sausage, cherry tomatoes, broccoli</p></div><span class="menu-item-price">$27</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Linguini al Granchio</span></div><p class="menu-item-desc">Linguini with mud crab, cherry tomatoes, garlic, and fresh herbs</p></div><span class="menu-item-price">$38</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Risotto ai Funghi</span><span class="tag tag-v">V</span><span class="tag tag-gf">GF</span></div><p class="menu-item-desc">Arborio rice, wild mushroom, truffle oil, parmesan &amp; thyme</p></div><span class="menu-item-price">$26</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Carbonara</span></div><p class="menu-item-desc">Spaghetti with guanciale, egg yolk, pecorino romano, freshly cracked black pepper</p></div><span class="menu-item-price">$24</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Pappardelle al Cinghiale</span></div><p class="menu-item-desc">House-made pappardelle with slow-braised wild boar rag&ugrave;</p></div><span class="menu-item-price">$32</span></div>
+    </div>
+  </div>
+  <!-- Pizza -->
+  <div class="menu-panel" id="tab-pizza">
+    <div class="menu-section-inner">
+      <h2 class="menu-section-title">Pizza</h2>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Margherita</span><span class="tag tag-v">V</span></div><p class="menu-item-desc">San Marzano tomato, fior di latte mozzarella, fresh basil</p></div><span class="menu-item-price">$20</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Prosciutto e Rucola</span></div><p class="menu-item-desc">Prosciutto di Parma, rocket, parmesan, cherry tomatoes, olive oil</p></div><span class="menu-item-price">$26</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Quattro Formaggi</span><span class="tag tag-v">V</span></div><p class="menu-item-desc">Mozzarella, gorgonzola, fontina, parmesan</p></div><span class="menu-item-price">$24</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Diavola</span></div><p class="menu-item-desc">Spicy Calabrese salami, mozzarella, chilli</p></div><span class="menu-item-price">$25</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Pizza del Bosco</span><span class="tag tag-v">V</span></div><p class="menu-item-desc">Wild mushrooms, truffle cream, mozzarella, rosemary</p></div><span class="menu-item-price">$27</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Frutti di Mare</span></div><p class="menu-item-desc">Mixed seafood, cherry tomatoes, garlic, fresh herbs</p></div><span class="menu-item-price">$32</span></div>
+    </div>
+  </div>
+  <!-- Mains -->
+  <div class="menu-panel" id="tab-mains">
+    <div class="menu-section-inner">
+      <h2 class="menu-section-title">Mains</h2>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Pollo Parmigiana</span></div><p class="menu-item-desc">Crumbed chicken breast, house-made tomato sauce, mozzarella, ham</p></div><span class="menu-item-price">$30</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Saltimbocca alla Romana</span><span class="tag tag-gf">GF</span></div><p class="menu-item-desc">Pan-fried veal, prosciutto, sage, white wine &amp; butter sauce</p></div><span class="menu-item-price">$38</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Bistecca alla Fiorentina</span><span class="tag tag-gf">GF</span></div><p class="menu-item-desc">500g T-bone steak, truffle butter, rosemary potatoes</p></div><span class="menu-item-price">$52</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Branzino al Forno</span><span class="tag tag-gf">GF</span></div><p class="menu-item-desc">Whole baked sea bass, lemon, capers, cherry tomatoes, olive oil</p></div><span class="menu-item-price">$42</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Ossobuco alla Milanese</span><span class="tag tag-gf">GF</span></div><p class="menu-item-desc">Braised veal shank, gremolata, saffron risotto</p></div><span class="menu-item-price">$45</span></div>
+    </div>
+  </div>
+  <!-- Kids -->
+  <div class="menu-panel" id="tab-kids">
+    <div class="menu-section-inner">
+      <h2 class="menu-section-title">Kids Menu</h2>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Kids Pasta al Pomodoro</span><span class="tag tag-v">V</span></div><p class="menu-item-desc">Penne or spaghetti with fresh tomato sauce and parmesan</p></div><span class="menu-item-price">$12</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Kids Margherita Pizza</span><span class="tag tag-v">V</span></div><p class="menu-item-desc">Small wood-fired pizza with tomato and mozzarella</p></div><span class="menu-item-price">$14</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Kids Chicken Schnitzel</span></div><p class="menu-item-desc">Crumbed chicken breast with chips and salad</p></div><span class="menu-item-price">$14</span></div>
+    </div>
+  </div>
+  <!-- Desserts -->
+  <div class="menu-panel" id="tab-desserts">
+    <div class="menu-section-inner">
+      <h2 class="menu-section-title">Desserts</h2>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Tiramisu</span><span class="tag tag-v">V</span></div><p class="menu-item-desc">Classic Italian tiramisu &mdash; espresso-soaked sponge, mascarpone cream, cocoa</p></div><span class="menu-item-price">$14</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Panna Cotta</span><span class="tag tag-v">V</span><span class="tag tag-gf">GF</span></div><p class="menu-item-desc">Vanilla panna cotta with seasonal berry compote</p></div><span class="menu-item-price">$12</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Cannoli Siciliani</span><span class="tag tag-v">V</span></div><p class="menu-item-desc">Crispy pastry shells filled with sweet ricotta, chocolate chips, orange zest</p></div><span class="menu-item-price">$13</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Affogato</span><span class="tag tag-v">V</span><span class="tag tag-gf">GF</span></div><p class="menu-item-desc">Double espresso poured over a scoop of vanilla gelato</p></div><span class="menu-item-price">$10</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Gelato del Giorno</span><span class="tag tag-v">V</span><span class="tag tag-gf">GF</span></div><p class="menu-item-desc">Three scoops of chef&rsquo;s daily gelato selection</p></div><span class="menu-item-price">$11</span></div>
+    </div>
+  </div>
+  <!-- Drinks -->
+  <div class="menu-panel" id="tab-drinks">
+    <div class="menu-section-inner">
+      <h2 class="menu-section-title">Drinks</h2>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">San Pellegrino Sparkling</span></div><p class="menu-item-desc">500ml sparkling mineral water</p></div><span class="menu-item-price">$5</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Italian Soda</span></div><p class="menu-item-desc">San Pellegrino Limonata, Aranciata, or Chinotto</p></div><span class="menu-item-price">$6</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Espresso / Macchiato</span></div><p class="menu-item-desc">Single origin Italian roast</p></div><span class="menu-item-price">$4</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Cappuccino / Latte / Flat White</span></div><p class="menu-item-desc">Traditional Italian coffee</p></div><span class="menu-item-price">$5</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">House Wine (Glass)</span></div><p class="menu-item-desc">Ask your server — red, white, or ros&eacute;</p></div><span class="menu-item-price">$12</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Aperol Spritz</span></div><p class="menu-item-desc">Aperol, prosecco, soda, orange</p></div><span class="menu-item-price">$16</span></div>
+      <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name-row"><span class="menu-item-name">Negroni</span></div><p class="menu-item-desc">Campari, gin, sweet vermouth</p></div><span class="menu-item-price">$18</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER CTA -->
+<section class="section" style="background:var(--dark);text-align:center;padding:3rem 1.5rem;">
+  <span class="section-label">Ready to Order?</span>
+  <h2 style="color:white;font-size:1.8rem;margin-bottom:1.5rem;">Order Online or Call Us</h2>
+  <div class="flex-center">
+    <a href="order.html" class="btn-primary">Order Online</a>
+    <a href="tel:+61883813446" class="btn-outline">(08) 8381 3446</a>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script>
+  // Menu tabs
+  document.querySelectorAll('.menu-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.menu-tab').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.menu-panel').forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+  // Solid navbar on inner pages
+  document.getElementById('navbar') && document.getElementById('navbar').classList.add('solid');
+</script>
+</body>
+</html>
