@@ -5,6 +5,7 @@ on:
     branches:
       - Master
       - main
+      - claude/master
 
 # Allow only one concurrent deployment
 concurrency:
