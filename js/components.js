@@ -91,4 +91,71 @@
   var fy = document.getElementById('footerYear');
   if (fy) fy.textContent = new Date().getFullYear();
 
+  // Load site.json and apply dynamic content (hours, contact, announcement)
+  fetch('data/site.json').then(function(r){ return r.json(); }).then(function(data) {
+
+    // ── Announcement banner ──
+    var ann = data.announcement;
+    if (ann && ann.active && ann.text) {
+      var typeColors = { info: '#4a90d9', promo: '#C9A84C', alert: '#e55555' };
+      var typeBg     = { info: 'rgba(74,144,217,0.12)', promo: 'rgba(201,168,76,0.10)', alert: 'rgba(229,85,85,0.12)' };
+      var color = typeColors[ann.type] || typeColors.info;
+      var bg    = typeBg[ann.type]    || typeBg.info;
+      var banner = document.createElement('div');
+      banner.id = 'site-announcement';
+      banner.style.cssText = 'background:' + bg + ';border-bottom:1px solid ' + color + ';color:' + color + ';text-align:center;padding:0.55rem 1rem;font-size:0.85rem;line-height:1.4;position:relative;z-index:200;';
+      banner.innerHTML = '📢 ' + ann.text.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      var navbar = document.getElementById('navbar');
+      if (navbar && navbar.parentNode) {
+        navbar.parentNode.insertBefore(banner, navbar.nextSibling);
+      } else {
+        document.body.insertBefore(banner, document.body.firstChild);
+      }
+    }
+
+    // ── Update footer hours ──
+    if (data.hours) {
+      var hourItems = document.querySelectorAll('.footer-hours-row');
+      var days = Object.keys(data.hours);
+      hourItems.forEach(function(row, i) {
+        if (!days[i]) return;
+        var dayEl  = row.querySelector('.footer-hours-day');
+        var timeEl = row.querySelector('.footer-hours-time');
+        if (dayEl)  dayEl.textContent  = days[i];
+        if (timeEl) {
+          timeEl.textContent = data.hours[days[i]];
+          if (data.hours[days[i]].toLowerCase() === 'closed') {
+            timeEl.classList.add('closed');
+          } else {
+            timeEl.classList.remove('closed');
+          }
+        }
+      });
+    }
+
+    // ── Update footer contact ──
+    if (data.contact) {
+      var phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+      var emailLinks = document.querySelectorAll('a[href^="mailto:"]');
+      if (data.contact.phone) {
+        var rawPhone = data.contact.phone.replace(/[^0-9+]/g, '');
+        phoneLinks.forEach(function(a) {
+          if (a.closest('.footer')) {
+            a.href = 'tel:+61' + rawPhone.replace(/^0/, '');
+            a.textContent = data.contact.phone;
+          }
+        });
+      }
+      if (data.contact.email) {
+        emailLinks.forEach(function(a) {
+          if (a.closest('.footer')) {
+            a.href = 'mailto:' + data.contact.email;
+            a.textContent = data.contact.email;
+          }
+        });
+      }
+    }
+
+  }).catch(function() { /* silently ignore if data/site.json can't load */ });
+
 })();
