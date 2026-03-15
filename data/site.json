@@ -16,7 +16,7 @@
     "phone": "(08) 8381 3446",
     "email": "info@tritticoristorante.com"
   },
-  "stripe_link": "https://buy.stripe.com/YOUR_PAYMENT_LINK_ID",
+  "stripe_link": "",
   "checkout_worker_url": "trittico-checkout.maddernsplace.workers.dev",
   "ordering_enabled": true,
   "kitchen_email": "",
