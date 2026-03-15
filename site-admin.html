@@ -321,6 +321,53 @@
         </div>
 
         <div class="a-card">
+          <div class="a-card-title">Kitchen Printer / Order Notifications</div>
+          <div class="setup-banner" style="margin-bottom:1rem;">
+            <strong>How to set up automatic kitchen printing</strong>
+            When a customer pays, an email is automatically sent to your kitchen printer or email.
+            <br><br>
+            <strong>Step 1 — EmailJS (free):</strong> Sign up at
+            <a href="https://www.emailjs.com/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">emailjs.com</a>,
+            add your Gmail/Outlook as a service, then create an email template with these variables:<br>
+            <code style="color:#e8c96a;">{{order_id}}</code> &bull;
+            <code style="color:#e8c96a;">{{order_type}}</code> &bull;
+            <code style="color:#e8c96a;">{{order_time}}</code> &bull;
+            <code style="color:#e8c96a;">{{{docket_html}}}</code> (triple braces for HTML) &bull;
+            <code style="color:#e8c96a;">{{items_text}}</code> &bull;
+            <code style="color:#e8c96a;">{{order_total}}</code> &bull;
+            <code style="color:#e8c96a;">{{order_note}}</code>
+            <br><br>
+            <strong>Step 2 — Kitchen email:</strong> Set the "To email" below to your kitchen computer email,
+            or your <strong>Star Micronics printer's cloud email address</strong> (from Star Cloud Services)
+            for fully automatic printing — no one needs to click anything.
+            <br><br>
+            <strong>Step 3 — Stripe redirect:</strong> In your Stripe dashboard → Payment Link → After Payment → set redirect URL to
+            <code style="color:#e8c96a;">https://maddernsplace.github.io/trittico/order-complete.html</code>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Kitchen / Printer Email</label>
+              <input class="form-input" id="kitchen-email" type="email" placeholder="kitchen@yourrestaurant.com or printer@starmicronics.com" />
+            </div>
+          </div>
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label">EmailJS Public Key</label>
+              <input class="form-input" id="ejs-public-key" type="text" placeholder="user_xxxxxxxx" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">EmailJS Service ID</label>
+              <input class="form-input" id="ejs-service-id" type="text" placeholder="service_xxxxxxxx" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">EmailJS Template ID</label>
+              <input class="form-input" id="ejs-template-id" type="text" placeholder="template_xxxxxxxx" />
+            </div>
+          </div>
+          <button class="btn-primary-a" id="btn-save-emailjs">Save &amp; Enable</button>
+        </div>
+
+        <div class="a-card">
           <div class="a-card-title">Change Password</div>
           <p style="color:var(--a-muted);font-size:0.82rem;margin-bottom:0.75rem;">
             To change the admin password, ask your developer to update the <code style="color:var(--a-gold);">PW_HASH</code> in <code style="color:var(--a-gold);">js/admin.js</code>.

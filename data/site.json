@@ -17,5 +17,11 @@
     "email": "info@tritticoristorante.com"
   },
   "stripe_link": "https://buy.stripe.com/YOUR_PAYMENT_LINK_ID",
-  "ordering_enabled": true
+  "ordering_enabled": true,
+  "kitchen_email": "",
+  "emailjs": {
+    "public_key": "",
+    "service_id": "",
+    "template_id": ""
+  }
 }

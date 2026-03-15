@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmed | Trittico Ristorante</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .confirm-wrap {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      background: var(--cream);
+    }
+    .confirm-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 2.5rem 2rem;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+    }
+    .confirm-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .confirm-title { font-size: 1.6rem; font-weight: 700; color: var(--dark); margin-bottom: 0.25rem; }
+    .confirm-sub   { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+    .confirm-order-num {
+      display: inline-block;
+      background: var(--cream);
+      border: 1px solid var(--gold);
+      color: var(--dark);
+      font-size: 0.85rem;
+      padding: 0.35rem 1rem;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .docket {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      text-align: left;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    .docket-head {
+      background: var(--dark);
+      color: white;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .docket-type {
+      background: var(--gold);
+      color: var(--dark);
+      padding: 0.2rem 0.6rem;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .docket-body { padding: 0.75rem 1rem; }
+    .docket-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px dashed #eee;
+      font-size: 0.88rem;
+    }
+    .docket-line:last-child { border-bottom: none; }
+    .docket-line-name { color: var(--dark); }
+    .docket-line-qty  { color: var(--muted); font-size: 0.78rem; margin-right: 0.4rem; }
+    .docket-line-price { color: var(--dark); font-weight: 600; }
+    .docket-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.6rem 1rem;
+      background: var(--cream);
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-top: 2px solid var(--dark);
+    }
+    .docket-note {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: italic;
+      border-top: 1px dashed #eee;
+      background: #fffdf5;
+    }
+    .confirm-actions { display: flex; gap: 0.75rem; flex-direction: column; }
+    .confirm-actions a, .confirm-actions button {
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
+    .btn-print {
+      background: var(--dark);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: background 0.2s;
+    }
+    .btn-print:hover { background: #000; }
+    .send-status {
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      min-height: 1.4em;
+      color: var(--muted);
+    }
+    .send-status.ok  { color: #2a9d5c; }
+    .send-status.err { color: #d64545; }
+
+    /* Print styles — formats like a thermal docket */
+    @media print {
+      body * { visibility: hidden; }
+      #printable, #printable * { visibility: visible; }
+      #printable {
+        position: fixed; top: 0; left: 0;
+        width: 72mm; /* thermal paper width */
+        font-family: 'Courier New', monospace;
+        font-size: 11pt;
+      }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<div class="confirm-wrap">
+  <!-- Loading state -->
+  <div id="loading-state" class="confirm-card">
+    <div class="confirm-icon">⏳</div>
+    <div class="confirm-title">Processing…</div>
+    <div class="confirm-sub">Confirming your order, one moment.</div>
+  </div>
+
+  <!-- No order found -->
+  <div id="no-order-state" class="confirm-card" style="display:none;">
+    <div class="confirm-icon">🤔</div>
+    <div class="confirm-title">No order found</div>
+    <div class="confirm-sub">It looks like this page was opened directly. Please place your order first.</div>
+    <a href="order.html" class="btn-primary" style="display:inline-block;margin-top:1.5rem;">Back to Order</a>
+  </div>
+
+  <!-- Confirmation -->
+  <div id="confirm-state" class="confirm-card" style="display:none;">
+    <div class="confirm-icon">✅</div>
+    <div class="confirm-title">Order Confirmed!</div>
+    <div class="confirm-sub">Thank you — your order has been received by the kitchen.</div>
+    <div class="confirm-order-num" id="order-num-display"></div>
+
+    <div class="send-status" id="send-status"></div>
+
+    <div id="printable">
+      <div class="docket">
+        <div class="docket-head">
+          <span>Trittico Ristorante</span>
+          <span class="docket-type" id="docket-type-badge"></span>
+        </div>
+        <div class="docket-body" id="docket-lines"></div>
+        <div class="docket-total">
+          <span>Total</span>
+          <span id="docket-total-amount"></span>
+        </div>
+        <div class="docket-note" id="docket-note" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="confirm-actions no-print">
+      <button class="btn-print" onclick="window.print()">🖨️ Print Receipt</button>
+      <a href="order.html" class="btn-outline" style="display:block;">Place Another Order</a>
+      <a href="index.html" style="color:var(--muted);font-size:0.82rem;display:block;margin-top:0.25rem;">Back to Home</a>
+    </div>
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script>
+document.getElementById('navbar') && document.getElementById('navbar').classList.add('solid');
+
+(function() {
+  var order = null;
+  try { order = JSON.parse(localStorage.getItem('tr_pending_order') || 'null'); } catch(e) {}
+
+  if (!order || !order.items || !order.items.length) {
+    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('no-order-state').style.display = 'block';
+    return;
+  }
+
+  // Render docket
+  document.getElementById('order-num-display').textContent = 'Order #' + order.id;
+  document.getElementById('docket-type-badge').textContent = order.type === 'pickup' ? 'PICKUP' : 'DINE IN';
+
+  var lines = order.items.map(function(it) {
+    return '<div class="docket-line">' +
+      '<span><span class="docket-line-qty">' + it.qty + 'x</span><span class="docket-line-name">' + it.name + '</span></span>' +
+      '<span class="docket-line-price">$' + (it.price * it.qty).toFixed(2) + '</span>' +
+    '</div>';
+  }).join('');
+  document.getElementById('docket-lines').innerHTML = lines;
+  document.getElementById('docket-total-amount').textContent = '$' + order.total.toFixed(2);
+
+  if (order.note) {
+    var noteEl = document.getElementById('docket-note');
+    noteEl.textContent = 'Note: ' + order.note;
+    noteEl.style.display = 'block';
+  }
+
+  // Show confirmation, clear pending order
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('confirm-state').style.display = 'block';
+  localStorage.removeItem('tr_pending_order');
+
+  // Send kitchen email via EmailJS
+  fetch('data/site.json').then(function(r){ return r.json(); }).then(function(cfg) {
+    var ejs = cfg.emailjs || {};
+    if (!ejs.public_key || !ejs.service_id || !ejs.template_id || !cfg.kitchen_email) {
+      document.getElementById('send-status').textContent = '';
+      return;
+    }
+
+    emailjs.init({ publicKey: ejs.public_key });
+
+    var itemsText = order.items.map(function(it) {
+      return it.qty + 'x ' + it.name + '  $' + (it.price * it.qty).toFixed(2);
+    }).join('\n');
+
+    var itemsHtml = order.items.map(function(it) {
+      return '<tr><td style="padding:4px 8px;">' + it.qty + 'x ' + it.name + '</td>' +
+             '<td style="padding:4px 8px;text-align:right;">$' + (it.price * it.qty).toFixed(2) + '</td></tr>';
+    }).join('');
+
+    var docketHtml =
+      '<div style="font-family:monospace;max-width:320px;border:1px solid #ccc;border-radius:4px;overflow:hidden;">' +
+      '<div style="background:#1A1008;color:white;padding:10px 14px;display:flex;justify-content:space-between;">' +
+        '<strong>Trittico Ristorante</strong>' +
+        '<span style="background:#C9A84C;color:#1A1008;padding:2px 8px;border-radius:3px;font-size:12px;font-weight:700;">' +
+          (order.type === 'pickup' ? 'PICKUP' : 'DINE IN') +
+        '</span>' +
+      '</div>' +
+      '<div style="padding:4px 0;">' +
+        '<table style="width:100%;border-collapse:collapse;">' + itemsHtml + '</table>' +
+      '</div>' +
+      '<div style="border-top:2px solid #1A1008;padding:8px 14px;display:flex;justify-content:space-between;font-weight:700;background:#f9f5ee;">' +
+        '<span>TOTAL</span><span>$' + order.total.toFixed(2) + '</span>' +
+      '</div>' +
+      (order.note ? '<div style="padding:6px 14px;font-style:italic;font-size:12px;color:#666;border-top:1px dashed #ddd;">Note: ' + order.note + '</div>' : '') +
+      '<div style="padding:6px 14px;font-size:11px;color:#999;border-top:1px dashed #ddd;">Order #' + order.id + ' &bull; ' + new Date(order.ts).toLocaleTimeString('en-AU', {hour:'2-digit',minute:'2-digit'}) + '</div>' +
+      '</div>';
+
+    emailjs.send(ejs.service_id, ejs.template_id, {
+      to_email:    cfg.kitchen_email,
+      order_id:    order.id,
+      order_type:  order.type === 'pickup' ? 'PICKUP' : 'DINE IN',
+      order_time:  new Date(order.ts).toLocaleTimeString('en-AU', {hour:'2-digit',minute:'2-digit'}),
+      items_text:  itemsText,
+      order_total: '$' + order.total.toFixed(2),
+      order_note:  order.note || '—',
+      docket_html: docketHtml
+    }).then(function() {
+      var el = document.getElementById('send-status');
+      el.className = 'send-status ok';
+      el.textContent = '✓ Kitchen has been notified';
+    }, function(err) {
+      var el = document.getElementById('send-status');
+      el.className = 'send-status err';
+      el.textContent = 'Kitchen notification failed — please call (08) 8381 3446';
+      console.error('EmailJS error:', err);
+    });
+
+  }).catch(function() {});
+
+})();
+</script>
+</body>
+</html>

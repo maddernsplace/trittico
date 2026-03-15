@@ -129,6 +129,23 @@ function renderMobileBar() {
   }
 }
 
+// ---- Save pending order to localStorage before Stripe ----
+function savePendingOrder(items, total, type, note) {
+  var id = 'T' + Date.now().toString(36).toUpperCase();
+  var order = {
+    id:    id,
+    ts:    Date.now(),
+    type:  type,
+    note:  note,
+    total: total,
+    items: items.map(function(item) {
+      return { id: item.id, name: item.name, price: item.price, qty: cart[item.id] };
+    })
+  };
+  localStorage.setItem('tr_pending_order', JSON.stringify(order));
+  return order;
+}
+
 // ---- Checkout modal ----
 function openModal() {
   if (getCount() === 0) return;
@@ -138,6 +155,9 @@ function openModal() {
     return '<div class="modal-order-line"><span>' + cart[item.id] + '&times; ' + item.name + '</span><span>$' + (item.price * cart[item.id]).toFixed(2) + '</span></div>';
   }).join('');
   var total = getTotal();
+
+  // Save order so order-complete.html can read it after Stripe redirects back
+  var pendingOrder = savePendingOrder(items, total, orderType, note);
 
   document.getElementById('modal-content').innerHTML =
     '<button class="modal-close" onclick="closeModal()">&#10005;</button>' +
