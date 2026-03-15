@@ -58,7 +58,7 @@
   async function ghGet(path) {
     const headers = { 'Accept': 'application/vnd.github+json' };
     if (ghToken) headers['Authorization'] = 'Bearer ' + ghToken;
-    const res = await fetch('https://api.github.com/repos/' + REPO + '/contents/' + path + '?ref=' + BRANCH, { headers });
+    const res = await fetch('https://api.github.com/repos/' + REPO + '/contents/' + path + '?ref=' + BRANCH + '&t=' + Date.now(), { headers, cache: 'no-store' });
     if (!res.ok) throw new Error('GitHub fetch failed: ' + res.status);
     return res.json();
   }
