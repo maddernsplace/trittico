@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Trittico</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+<!-- ===== LOCK SCREEN ===== -->
+<div id="lock-screen">
+  <div class="lock-card">
+    <div class="lock-logo">Trittico</div>
+    <div class="lock-sub">Site Administration</div>
+    <div class="lock-error" id="pw-error"></div>
+    <input type="password" id="pw-input" placeholder="Password" autofocus />
+    <button class="btn-lock" id="pw-submit">Enter</button>
+  </div>
+</div>
+
+<!-- ===== ADMIN APP ===== -->
+<div id="admin-app">
+
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="admin-brand">
+      <div class="admin-brand-name">Trittico</div>
+      <div class="admin-brand-badge">Admin</div>
+    </div>
+    <div class="admin-header-right">
+      <span class="save-status" id="save-status"></span>
+      <button class="btn-logout" id="btn-logout">Log out</button>
+    </div>
+  </header>
+
+  <div class="admin-body">
+
+    <!-- Sidebar -->
+    <nav class="admin-nav">
+      <div class="nav-section-label">Content</div>
+      <button class="admin-nav-btn" data-tab="menu">
+        <span class="nav-icon">🍽</span> Menu
+      </button>
+      <button class="admin-nav-btn" data-tab="order">
+        <span class="nav-icon">🛒</span> Online Order
+      </button>
+      <button class="admin-nav-btn" data-tab="announce">
+        <span class="nav-icon">📢</span> Announcement
+      </button>
+
+      <div class="nav-section-label">Info</div>
+      <button class="admin-nav-btn" data-tab="hours">
+        <span class="nav-icon">🕐</span> Hours
+      </button>
+      <button class="admin-nav-btn" data-tab="contact">
+        <span class="nav-icon">📍</span> Contact
+      </button>
+
+      <div class="nav-section-label">Site</div>
+      <button class="admin-nav-btn" data-tab="pages">
+        <span class="nav-icon">🔗</span> Pages
+      </button>
+      <button class="admin-nav-btn" data-tab="settings">
+        <span class="nav-icon">⚙️</span> Settings
+      </button>
+    </nav>
+
+    <!-- Main -->
+    <main class="admin-main">
+
+      <!-- ── MENU PANEL ── -->
+      <div class="tab-panel" id="panel-menu">
+        <div class="panel-title">Menu</div>
+        <div class="panel-desc">Add, edit, or remove items. Changes publish automatically.</div>
+
+        <div class="menu-toolbar">
+          <div class="cat-filter-btns" id="cat-filter-bar"></div>
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <span id="menu-stats" style="font-size:0.75rem;color:var(--a-muted);"></span>
+            <button class="btn-primary-a" id="btn-add-item">+ Add Item</button>
+          </div>
+        </div>
+
+        <!-- Add / Edit form -->
+        <div class="item-form" id="item-form">
+          <div class="item-form-title" id="item-form-title">Add New Item</div>
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label">Name *</label>
+              <input class="form-input" id="f-name" type="text" placeholder="e.g. Spaghetti Carbonara" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price * ($)</label>
+              <input class="form-input" id="f-price" type="number" min="0" step="0.5" placeholder="24" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select class="form-input" id="f-cat">
+                <option>Starters</option>
+                <option>Soups</option>
+                <option>Pasta</option>
+                <option>Pizza</option>
+                <option>Mains</option>
+                <option>Kids</option>
+                <option>Desserts</option>
+                <option>Drinks</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Description</label>
+              <input class="form-input" id="f-desc" type="text" placeholder="Short description of the dish" />
+            </div>
+          </div>
+          <div class="form-row form-row-2" style="align-items:center;">
+            <div class="form-group">
+              <label class="form-label">Dietary Tags</label>
+              <div style="display:flex;gap:1rem;margin-top:0.25rem;">
+                <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.85rem;cursor:pointer;">
+                  <input type="checkbox" id="f-tag-v"> <span style="color:var(--a-green);">V</span> Vegetarian
+                </label>
+                <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.85rem;cursor:pointer;">
+                  <input type="checkbox" id="f-tag-vg"> <span style="color:var(--a-blue);">VG</span> Vegan
+                </label>
+                <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.85rem;cursor:pointer;">
+                  <input type="checkbox" id="f-tag-gf"> <span style="color:var(--a-yellow);">GF</span> Gluten Free
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Availability</label>
+              <label style="display:flex;align-items:center;gap:0.5rem;margin-top:0.25rem;font-size:0.85rem;cursor:pointer;">
+                <input type="checkbox" id="f-avail" checked> Show on menu &amp; online order
+              </label>
+            </div>
+          </div>
+          <div class="item-form-actions">
+            <button class="btn-primary-a" id="btn-save-item">Save Item</button>
+            <button class="btn-ghost" id="btn-cancel-item">Cancel</button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="a-card" style="padding:0;overflow:auto;">
+          <table class="menu-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Tags</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="menu-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── ORDER PANEL ── -->
+      <div class="tab-panel" id="panel-order">
+        <div class="panel-title">Online Order</div>
+        <div class="panel-desc">Manage your payment link, toggle ordering on/off, and control which items are available.</div>
+
+        <div class="a-card">
+          <div class="a-card-title">Order Status</div>
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label" id="order-status-text"><span class="status-dot green"></span>Online ordering is ENABLED</div>
+              <div class="toggle-desc">Toggle to temporarily disable all online ordering</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="ordering-toggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="a-card">
+          <div class="a-card-title">Stripe Payment Link</div>
+          <p style="color:var(--a-muted);font-size:0.82rem;margin-bottom:0.75rem;">
+            Create a Payment Link at
+            <a href="https://dashboard.stripe.com/payment-links" target="_blank" rel="noopener" style="color:var(--a-gold);">dashboard.stripe.com/payment-links</a>
+            then paste the URL here.
+          </p>
+          <div style="display:flex;gap:0.5rem;">
+            <input class="form-input" id="stripe-link-input" type="url" placeholder="https://buy.stripe.com/…" style="flex:1;" />
+            <button class="btn-primary-a" id="btn-save-stripe">Save</button>
+          </div>
+        </div>
+
+        <div class="a-card">
+          <div class="a-card-title">Item Availability</div>
+          <p style="color:var(--a-muted);font-size:0.82rem;margin-bottom:1rem;">Hide items from the online order page (they still appear on the menu).</p>
+          <div id="order-avail-list"></div>
+        </div>
+      </div>
+
+      <!-- ── ANNOUNCEMENT PANEL ── -->
+      <div class="tab-panel" id="panel-announce">
+        <div class="panel-title">Announcement Banner</div>
+        <div class="panel-desc">Show a message at the top of every page — specials, closures, events, etc.</div>
+
+        <div class="a-card">
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Show banner on site</div>
+              <div class="toggle-desc">Turn off to hide the banner without deleting it</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="ann-active">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div style="margin-top:1rem;" class="form-row form-row-2">
+            <div class="form-group" style="grid-column:1/-1;">
+              <label class="form-label">Message</label>
+              <input class="form-input" id="ann-text" type="text" placeholder="e.g. Kitchen closed Monday 20 Jan — Happy Australia Day!" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Style</label>
+              <select class="form-input" id="ann-type">
+                <option value="info">Blue — Info</option>
+                <option value="promo">Gold — Promo / Special</option>
+                <option value="alert">Red — Alert / Closed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="announce-preview" id="ann-preview"></div>
+
+          <div style="margin-top:1rem;">
+            <button class="btn-primary-a" id="btn-save-ann">Save &amp; Publish</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── HOURS PANEL ── -->
+      <div class="tab-panel" id="panel-hours">
+        <div class="panel-title">Opening Hours</div>
+        <div class="panel-desc">Update your hours — these show in the footer and on the contact page.</div>
+
+        <div class="a-card">
+          <div id="hours-rows"></div>
+          <div style="margin-top:1rem;">
+            <button class="btn-primary-a" id="btn-save-hours">Save Hours</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CONTACT PANEL ── -->
+      <div class="tab-panel" id="panel-contact">
+        <div class="panel-title">Contact Details</div>
+        <div class="panel-desc">Update your address, phone, and email shown across the site.</div>
+
+        <div class="a-card">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Address</label>
+              <input class="form-input" id="c-address" type="text" placeholder="154 Main South Rd, Hackham SA 5163" />
+            </div>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Phone</label>
+              <input class="form-input" id="c-phone" type="text" placeholder="(08) 8381 3446" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input class="form-input" id="c-email" type="email" placeholder="info@tritticoristorante.com" />
+            </div>
+          </div>
+          <button class="btn-primary-a" id="btn-save-contact">Save Contact</button>
+        </div>
+      </div>
+
+      <!-- ── PAGES PANEL ── -->
+      <div class="tab-panel" id="panel-pages">
+        <div class="panel-title">Site Pages</div>
+        <div class="panel-desc">Quick links to preview all pages.</div>
+        <div class="pages-grid">
+          <a href="index.html"      target="_blank" class="page-link-card"><span class="page-link-icon">🏠</span>Home</a>
+          <a href="menu.html"       target="_blank" class="page-link-card"><span class="page-link-icon">🍝</span>Menu</a>
+          <a href="order.html"      target="_blank" class="page-link-card"><span class="page-link-icon">🛒</span>Order Online</a>
+          <a href="about.html"      target="_blank" class="page-link-card"><span class="page-link-icon">👨‍🍳</span>About</a>
+          <a href="contact.html"    target="_blank" class="page-link-card"><span class="page-link-icon">📍</span>Contact</a>
+          <a href="gift-cards.html" target="_blank" class="page-link-card"><span class="page-link-icon">🎁</span>Gift Cards</a>
+        </div>
+      </div>
+
+      <!-- ── SETTINGS PANEL ── -->
+      <div class="tab-panel" id="panel-settings">
+        <div class="panel-title">Settings</div>
+        <div class="panel-desc">Configure your GitHub connection to enable saving changes.</div>
+
+        <div class="setup-banner">
+          <strong>How saving works</strong>
+          Changes you make here are committed directly to your GitHub repository and deployed automatically.
+          You need a GitHub Personal Access Token with <em>repo</em> write permission.
+          <a href="https://github.com/settings/tokens/new?description=Trittico+Admin&scopes=repo" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">
+            Generate a token here ↗
+          </a>
+        </div>
+
+        <div class="a-card">
+          <div class="a-card-title">GitHub Personal Access Token</div>
+          <div id="token-status" style="margin-bottom:0.75rem;font-size:0.82rem;"></div>
+          <div class="token-field-row">
+            <input class="form-input" id="gh-token-input" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+            <button class="btn-primary-a" id="btn-save-token">Save Token</button>
+            <button class="btn-ghost" id="btn-clear-token">Clear</button>
+          </div>
+          <p style="color:var(--a-muted);font-size:0.75rem;margin-top:0.6rem;">
+            Your token is stored only in this browser's local storage and never sent anywhere except GitHub's API.
+          </p>
+        </div>
+
+        <div class="a-card">
+          <div class="a-card-title">Change Password</div>
+          <p style="color:var(--a-muted);font-size:0.82rem;margin-bottom:0.75rem;">
+            To change the admin password, ask your developer to update the <code style="color:var(--a-gold);">PW_HASH</code> in <code style="color:var(--a-gold);">js/admin.js</code>.
+            Run <code style="color:var(--a-gold);">echo -n "newpassword" | sha256sum</code> to get the new hash.
+          </p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="a-toast"></div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

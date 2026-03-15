@@ -1,0 +1,21 @@
+{
+  "announcement": {
+    "active": false,
+    "text": "",
+    "type": "info"
+  },
+  "hours": {
+    "Monday":   "Closed",
+    "Tue–Thu":  "11:30am–9pm",
+    "Friday":   "11:30am–10pm",
+    "Saturday": "8am–10pm",
+    "Sunday":   "8am–3pm"
+  },
+  "contact": {
+    "address": "154 Main South Rd, Hackham SA 5163",
+    "phone": "(08) 8381 3446",
+    "email": "info@tritticoristorante.com"
+  },
+  "stripe_link": "https://buy.stripe.com/YOUR_PAYMENT_LINK_ID",
+  "ordering_enabled": true
+}
