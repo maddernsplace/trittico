@@ -17,7 +17,7 @@
     "email": "info@tritticoristorante.com"
   },
   "stripe_link": "",
-  "checkout_worker_url": "trittico-checkout.maddernsplace.workers.dev",
+  "checkout_worker_url": "https://trittico-checkout.maddernsplace.workers.dev",
   "ordering_enabled": true,
   "kitchen_email": "",
   "emailjs": {
