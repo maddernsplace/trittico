@@ -147,6 +147,7 @@
     renderAnnouncement();
     renderHours();
     renderContact();
+    renderEmailSettings();
   }
 
   // ──────────────────────────────────────────────────────────
@@ -269,6 +270,8 @@
   //  ORDER PANEL
   // ──────────────────────────────────────────────────────────
   function renderOrder() {
+    const workerInput = document.getElementById('worker-url-input');
+    if (workerInput) workerInput.value = siteData.checkout_worker_url || '';
     const stripeInput = document.getElementById('stripe-link-input');
     if (stripeInput) stripeInput.value = siteData.stripe_link || '';
     const orderToggle = document.getElementById('ordering-toggle');
@@ -391,6 +394,19 @@
     updateTokenStatus();
   }
 
+  // ── Render EmailJS settings from siteData ────────────────
+  function renderEmailSettings() {
+    const kitchen = document.getElementById('kitchen-email');
+    const pubKey  = document.getElementById('ejs-public-key');
+    const svcId   = document.getElementById('ejs-service-id');
+    const tplId   = document.getElementById('ejs-template-id');
+    if (kitchen) kitchen.value = siteData.kitchen_email || '';
+    const ejs = siteData.emailjs || {};
+    if (pubKey) pubKey.value = ejs.public_key  || '';
+    if (svcId)  svcId.value  = ejs.service_id  || '';
+    if (tplId)  tplId.value  = ejs.template_id || '';
+  }
+
   function updateTokenStatus() {
     const el = document.getElementById('token-status');
     if (!el) return;
@@ -447,6 +463,10 @@
     document.getElementById('btn-save-item').addEventListener('click', saveItem);
 
     // ── Order panel wiring ──
+    document.getElementById('btn-save-worker-url').addEventListener('click', function() {
+      siteData.checkout_worker_url = document.getElementById('worker-url-input').value.trim();
+      saveSite('Update Checkout Worker URL');
+    });
     document.getElementById('btn-save-stripe').addEventListener('click', function() {
       siteData.stripe_link = document.getElementById('stripe-link-input').value.trim();
       saveSite('Update Stripe payment link');
@@ -486,6 +506,17 @@
         email:   document.getElementById('c-email').value.trim()
       };
       saveSite('Update contact details');
+    });
+
+    // ── EmailJS / kitchen printer wiring ──
+    document.getElementById('btn-save-emailjs').addEventListener('click', function() {
+      siteData.kitchen_email = document.getElementById('kitchen-email').value.trim();
+      siteData.emailjs = {
+        public_key:  document.getElementById('ejs-public-key').value.trim(),
+        service_id:  document.getElementById('ejs-service-id').value.trim(),
+        template_id: document.getElementById('ejs-template-id').value.trim()
+      };
+      saveSite('Update kitchen email / EmailJS config');
     });
 
     // ── GitHub token wiring ──

@@ -181,11 +181,34 @@
         </div>
 
         <div class="a-card">
-          <div class="a-card-title">Stripe Payment Link</div>
+          <div class="a-card-title">Checkout Worker URL <span style="font-size:0.7rem;background:rgba(62,207,142,0.15);color:#3ecf8e;padding:0.1rem 0.5rem;border-radius:3px;margin-left:0.4rem;">Recommended</span></div>
           <p style="color:var(--a-muted);font-size:0.82rem;margin-bottom:0.75rem;">
-            Create a Payment Link at
-            <a href="https://dashboard.stripe.com/payment-links" target="_blank" rel="noopener" style="color:var(--a-gold);">dashboard.stripe.com/payment-links</a>
-            then paste the URL here.
+            Your Cloudflare Worker URL. When set, Stripe receives the actual items ordered (itemised receipt, correct amount).
+            Deploy the Worker from <code style="color:var(--a-gold);">worker/checkout.js</code> in your repo.
+            See setup instructions below.
+          </p>
+          <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">
+            <input class="form-input" id="worker-url-input" type="url" placeholder="https://trittico-checkout.yourname.workers.dev" style="flex:1;" />
+            <button class="btn-primary-a" id="btn-save-worker-url">Save</button>
+          </div>
+          <details style="margin-top:0.5rem;">
+            <summary style="font-size:0.78rem;color:var(--a-muted);cursor:pointer;">How to deploy the Worker (3 steps)</summary>
+            <div style="margin-top:0.75rem;font-size:0.8rem;color:var(--a-muted);line-height:1.8;">
+              <strong style="color:var(--a-text);">1.</strong> Sign up free at
+              <a href="https://dash.cloudflare.com/sign-up/workers-and-pages" target="_blank" rel="noopener" style="color:var(--a-gold);">cloudflare.com</a><br>
+              <strong style="color:var(--a-text);">2.</strong> In your terminal, run:<br>
+              <code style="background:var(--a-bg);padding:0.3rem 0.6rem;border-radius:3px;display:block;margin:0.3rem 0;">cd worker &amp;&amp; npx wrangler deploy</code>
+              <code style="background:var(--a-bg);padding:0.3rem 0.6rem;border-radius:3px;display:block;margin:0.3rem 0;">npx wrangler secret put STRIPE_SECRET_KEY</code>
+              <em>(paste your Stripe secret key — starts with sk_live_ or sk_test_)</em><br>
+              <strong style="color:var(--a-text);">3.</strong> Copy the Worker URL from the deploy output and paste it above.
+            </div>
+          </details>
+        </div>
+
+        <div class="a-card">
+          <div class="a-card-title">Stripe Payment Link <span style="font-size:0.7rem;background:rgba(240,180,41,0.15);color:#f0b429;padding:0.1rem 0.5rem;border-radius:3px;margin-left:0.4rem;">Fallback</span></div>
+          <p style="color:var(--a-muted);font-size:0.82rem;margin-bottom:0.75rem;">
+            Used only if the Checkout Worker is not set up. Stripe won't know the order details.
           </p>
           <div style="display:flex;gap:0.5rem;">
             <input class="form-input" id="stripe-link-input" type="url" placeholder="https://buy.stripe.com/…" style="flex:1;" />
@@ -318,6 +341,53 @@
           <p style="color:var(--a-muted);font-size:0.75rem;margin-top:0.6rem;">
             Your token is stored only in this browser's local storage and never sent anywhere except GitHub's API.
           </p>
+        </div>
+
+        <div class="a-card">
+          <div class="a-card-title">Kitchen Printer / Order Notifications</div>
+          <div class="setup-banner" style="margin-bottom:1rem;">
+            <strong>How to set up automatic kitchen printing</strong>
+            When a customer pays, an email is automatically sent to your kitchen printer or email.
+            <br><br>
+            <strong>Step 1 — EmailJS (free):</strong> Sign up at
+            <a href="https://www.emailjs.com/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">emailjs.com</a>,
+            add your Gmail/Outlook as a service, then create an email template with these variables:<br>
+            <code style="color:#e8c96a;">{{order_id}}</code> &bull;
+            <code style="color:#e8c96a;">{{order_type}}</code> &bull;
+            <code style="color:#e8c96a;">{{order_time}}</code> &bull;
+            <code style="color:#e8c96a;">{{{docket_html}}}</code> (triple braces for HTML) &bull;
+            <code style="color:#e8c96a;">{{items_text}}</code> &bull;
+            <code style="color:#e8c96a;">{{order_total}}</code> &bull;
+            <code style="color:#e8c96a;">{{order_note}}</code>
+            <br><br>
+            <strong>Step 2 — Kitchen email:</strong> Set the "To email" below to your kitchen computer email,
+            or your <strong>Star Micronics printer's cloud email address</strong> (from Star Cloud Services)
+            for fully automatic printing — no one needs to click anything.
+            <br><br>
+            <strong>Step 3 — Stripe redirect:</strong> In your Stripe dashboard → Payment Link → After Payment → set redirect URL to
+            <code style="color:#e8c96a;">https://maddernsplace.github.io/trittico/order-complete.html</code>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Kitchen / Printer Email</label>
+              <input class="form-input" id="kitchen-email" type="email" placeholder="kitchen@yourrestaurant.com or printer@starmicronics.com" />
+            </div>
+          </div>
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label">EmailJS Public Key</label>
+              <input class="form-input" id="ejs-public-key" type="text" placeholder="user_xxxxxxxx" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">EmailJS Service ID</label>
+              <input class="form-input" id="ejs-service-id" type="text" placeholder="service_xxxxxxxx" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">EmailJS Template ID</label>
+              <input class="form-input" id="ejs-template-id" type="text" placeholder="template_xxxxxxxx" />
+            </div>
+          </div>
+          <button class="btn-primary-a" id="btn-save-emailjs">Save &amp; Enable</button>
         </div>
 
         <div class="a-card">
