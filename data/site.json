@@ -5,11 +5,11 @@
     "type": "info"
   },
   "hours": {
-    "Monday":   "Closed",
-    "Tue–Thu":  "11:30am–9pm",
-    "Friday":   "11:30am–10pm",
-    "Saturday": "8am–10pm",
-    "Sunday":   "8am–3pm"
+    "Monday": "Closed",
+    "TueâThu": "11:30amâ9pm",
+    "Friday": "11:30amâ10pm",
+    "Saturday": "8amâ10pm",
+    "Sunday": "8amâ3pm"
   },
   "contact": {
     "address": "154 Main South Rd, Hackham SA 5163",
