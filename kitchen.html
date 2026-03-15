@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kitchen Orders | Trittico</title>
+  <style>
+    /* ── Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #111;
+      --surface: #1e1e1e;
+      --border:  #333;
+      --text:    #f0ede8;
+      --muted:   #888;
+      --gold:    #C9A84C;
+      --green:   #2a9d5c;
+      --red:     #d64545;
+      --new-bg:  #1a2a1a;
+      --new-border: #2a9d5c;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Header ───────────────────────────────────────────── */
+    .header {
+      background: #000;
+      border-bottom: 2px solid var(--gold);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header-title { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.04em; }
+    .header-title span { color: var(--gold); }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .status-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--muted);
+      display: inline-block;
+    }
+    .status-dot.live  { background: var(--green); animation: pulse 2s infinite; }
+    .status-dot.error { background: var(--red); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .status-text { font-size: 0.78rem; color: var(--muted); }
+    .btn-settings {
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); padding: 0.35rem 0.75rem;
+      border-radius: 4px; cursor: pointer; font-size: 0.8rem;
+    }
+    .btn-settings:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── Setup screen ─────────────────────────────────────── */
+    .setup-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100;
+    }
+    .setup-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 440px;
+    }
+    .setup-card h2 { font-size: 1.1rem; margin-bottom: 0.4rem; color: var(--gold); }
+    .setup-card p  { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .setup-field   { margin-bottom: 1rem; }
+    .setup-field label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.3rem; }
+    .setup-field input {
+      width: 100%; padding: 0.6rem 0.75rem;
+      background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); border-radius: 4px; font-size: 0.88rem;
+    }
+    .setup-field input:focus { outline: none; border-color: var(--gold); }
+    .setup-field small { display: block; color: var(--muted); font-size: 0.75rem; margin-top: 0.25rem; }
+    .btn-save {
+      width: 100%; padding: 0.7rem; background: var(--gold);
+      color: #000; border: none; border-radius: 4px;
+      font-weight: 700; font-size: 0.9rem; cursor: pointer; margin-top: 0.5rem;
+    }
+    .btn-save:hover { background: #dbb85a; }
+    .setup-check { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+    .setup-check input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--gold); }
+    .setup-check label { font-size: 0.82rem; color: var(--text); cursor: pointer; }
+
+    /* ── Orders grid ──────────────────────────────────────── */
+    .main { padding: 1rem 1.25rem; }
+    .section-title {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      color: var(--muted); text-transform: uppercase; margin-bottom: 0.75rem;
+    }
+    .orders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Order card ───────────────────────────────────────── */
+    .order-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .order-card.is-new {
+      background: var(--new-bg);
+      border-color: var(--new-border);
+      box-shadow: 0 0 12px rgba(42,157,92,0.25);
+    }
+    .card-head {
+      background: #000;
+      padding: 0.6rem 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .order-card.is-new .card-head { background: #0d1f0d; }
+    .card-id   { color: var(--text); letter-spacing: 0.03em; }
+    .card-type {
+      background: var(--gold); color: #000;
+      padding: 0.15rem 0.5rem; border-radius: 3px;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
+    }
+    .card-body { padding: 0.75rem 0.9rem; }
+    .card-time { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.5rem; }
+    .card-items { list-style: none; margin-bottom: 0.5rem; }
+    .card-items li {
+      display: flex; justify-content: space-between;
+      font-size: 0.84rem; padding: 0.2rem 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .card-items li:last-child { border-bottom: none; }
+    .item-qty  { color: var(--muted); margin-right: 0.4rem; font-size: 0.78rem; }
+    .item-price { color: var(--text); font-size: 0.8rem; }
+    .card-total {
+      display: flex; justify-content: space-between;
+      font-weight: 700; font-size: 0.9rem;
+      padding-top: 0.4rem; border-top: 2px solid var(--border);
+    }
+    .card-note {
+      margin-top: 0.5rem; padding: 0.4rem 0.6rem;
+      background: #2a2510; border-left: 3px solid var(--gold);
+      font-size: 0.8rem; color: #ccc; font-style: italic;
+      border-radius: 0 3px 3px 0;
+    }
+    .card-foot {
+      padding: 0.6rem 0.9rem;
+      display: flex; gap: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .btn-done {
+      flex: 1; padding: 0.5rem;
+      background: var(--green); color: #fff;
+      border: none; border-radius: 4px;
+      font-weight: 700; font-size: 0.84rem; cursor: pointer;
+    }
+    .btn-done:hover { background: #22845a; }
+    .btn-reprint {
+      padding: 0.5rem 0.75rem;
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); border-radius: 4px;
+      font-size: 0.8rem; cursor: pointer;
+    }
+    .btn-reprint:hover { border-color: var(--text); color: var(--text); }
+
+    /* ── Empty state ──────────────────────────────────────── */
+    .empty-state {
+      text-align: center; padding: 3rem 1rem;
+      color: var(--muted);
+    }
+    .empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .empty-text { font-size: 0.9rem; }
+
+    /* ── Toast notification ───────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--green); color: #fff;
+      padding: 0.75rem 1.25rem; border-radius: 6px;
+      font-weight: 600; font-size: 0.88rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      transform: translateY(100px); opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 50;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── Print styles — 72mm thermal receipt ─────────────── */
+    @media print {
+      body * { visibility: hidden !important; }
+      #print-receipt, #print-receipt * { visibility: visible !important; }
+      #print-receipt {
+        position: fixed; top: 0; left: 0;
+        width: 72mm;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 10.5pt;
+        color: #000;
+        background: #fff;
+        padding: 4mm 3mm;
+      }
+      .pr-center { text-align: center; }
+      .pr-bold   { font-weight: bold; }
+      .pr-rule   { border: none; border-top: 1px dashed #000; margin: 3mm 0; }
+      .pr-line   { display: flex; justify-content: space-between; margin: 1mm 0; }
+      .pr-total  { display: flex; justify-content: space-between; font-weight: bold; font-size: 11pt; border-top: 2px solid #000; padding-top: 2mm; margin-top: 1mm; }
+      .pr-note   { font-style: italic; font-size: 9pt; margin-top: 2mm; }
+      .pr-footer { text-align: center; font-size: 8.5pt; margin-top: 3mm; color: #444; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────────────────────── -->
+<div class="header no-print">
+  <div class="header-title">TRITTICO <span>KITCHEN</span></div>
+  <div class="header-right">
+    <span class="status-dot" id="status-dot"></span>
+    <span class="status-text" id="status-text">Connecting…</span>
+    <button class="btn-settings" onclick="openSetup()">⚙ Settings</button>
+  </div>
+</div>
+
+<!-- ── Setup overlay ───────────────────────────────────────────────────────── -->
+<div class="setup-overlay" id="setup-overlay">
+  <div class="setup-card">
+    <h2>Kitchen Setup</h2>
+    <p>Enter the details below. You only need to do this once — they are saved on this device.</p>
+
+    <div class="setup-field">
+      <label>Worker URL</label>
+      <input type="url" id="cfg-worker" placeholder="https://trittico-checkout.maddernsplace.workers.dev" />
+      <small>Your Cloudflare Worker URL (already deployed for Stripe checkout)</small>
+    </div>
+
+    <div class="setup-field">
+      <label>Kitchen Token <em style="font-weight:400;color:var(--muted)">(optional)</em></label>
+      <input type="password" id="cfg-token" placeholder="Leave blank if you haven't set one" />
+      <small>Matches KITCHEN_TOKEN in your Worker environment variables</small>
+    </div>
+
+    <div class="setup-check">
+      <input type="checkbox" id="cfg-autoprint" />
+      <label for="cfg-autoprint">Auto-print when a new order arrives</label>
+    </div>
+    <div class="setup-check">
+      <input type="checkbox" id="cfg-sound" checked />
+      <label for="cfg-sound">Play alert sound for new orders</label>
+    </div>
+
+    <button class="btn-save" onclick="saveSetup()">Save &amp; Start</button>
+
+    <p style="margin-top:1.25rem;font-size:0.78rem;color:var(--muted);">
+      <strong style="color:#aaa;">Auto-print tip:</strong> For silent printing without a dialog,
+      open Chrome with the flag <code style="background:#111;padding:1px 4px;border-radius:3px;">--kiosk-printing</code>.<br>
+      Windows: right-click Chrome shortcut → Properties → add <code style="background:#111;padding:1px 4px;border-radius:3px;">--kiosk-printing</code>
+      to the Target field. Make sure the Epson TM-M30III is your default printer.
+    </p>
+  </div>
+</div>
+
+<!-- ── Orders ──────────────────────────────────────────────────────────────── -->
+<div class="main no-print" id="main-content" style="display:none;">
+  <div class="section-title" id="queue-title">Active Orders</div>
+  <div class="orders-grid" id="orders-grid">
+    <div class="empty-state">
+      <div class="empty-icon">🍽️</div>
+      <div class="empty-text">No new orders yet. Waiting…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Print receipt (invisible on screen, appears only when printing) ─────── -->
+<div id="print-receipt" aria-hidden="true"></div>
+
+<!-- ── Toast ───────────────────────────────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+
+  var cfg       = {};
+  var knownIds  = new Set();
+  var pollTimer = null;
+  var printQueue = [];
+  var printing  = false;
+
+  // ── Setup ──────────────────────────────────────────────────────────────────
+
+  function loadCfg() {
+    try {
+      var raw = localStorage.getItem('tr_kitchen_cfg');
+      if (raw) cfg = JSON.parse(raw);
+    } catch(e) {}
+    cfg.autoprint = cfg.autoprint !== false; // default true
+    cfg.sound     = cfg.sound !== false;     // default true
+  }
+
+  function openSetup() {
+    loadCfg();
+    document.getElementById('cfg-worker').value     = cfg.workerUrl || '';
+    document.getElementById('cfg-token').value      = cfg.token     || '';
+    document.getElementById('cfg-autoprint').checked = !!cfg.autoprint;
+    document.getElementById('cfg-sound').checked     = !!cfg.sound;
+    document.getElementById('setup-overlay').style.display = 'flex';
+    document.getElementById('main-content').style.display  = 'none';
+  }
+
+  function saveSetup() {
+    var url = document.getElementById('cfg-worker').value.trim().replace(/\/$/, '');
+    if (!url) { alert('Please enter the Worker URL.'); return; }
+    cfg.workerUrl  = url;
+    cfg.token      = document.getElementById('cfg-token').value.trim();
+    cfg.autoprint  = document.getElementById('cfg-autoprint').checked;
+    cfg.sound      = document.getElementById('cfg-sound').checked;
+    localStorage.setItem('tr_kitchen_cfg', JSON.stringify(cfg));
+    document.getElementById('setup-overlay').style.display = 'none';
+    document.getElementById('main-content').style.display  = 'block';
+    startPolling();
+  }
+
+  // Load worker URL from site.json as a default if not set
+  function prefillWorkerUrl() {
+    if (cfg.workerUrl) return;
+    fetch('data/site.json').then(function(r){ return r.json(); }).then(function(d) {
+      if (d.checkout_worker_url) {
+        document.getElementById('cfg-worker').value = d.checkout_worker_url;
+      }
+    }).catch(function(){});
+  }
+
+  // ── Polling ────────────────────────────────────────────────────────────────
+
+  function startPolling() {
+    if (pollTimer) clearInterval(pollTimer);
+    poll();
+    pollTimer = setInterval(poll, 8000);
+  }
+
+  function poll() {
+    if (!cfg.workerUrl) return;
+    var headers = { 'Content-Type': 'application/json' };
+    if (cfg.token) headers['Authorization'] = 'Bearer ' + cfg.token;
+
+    fetch(cfg.workerUrl + '/orders', { headers: headers })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        setStatus('live', 'Live — updated ' + new Date().toLocaleTimeString('en-AU', {hour:'2-digit', minute:'2-digit', second:'2-digit'}));
+        renderOrders(data.orders || []);
+        handleNewOrders(data.orders || []);
+      })
+      .catch(function(err) {
+        setStatus('error', 'Connection error');
+        console.error('Poll error:', err);
+      });
+  }
+
+  function setStatus(state, text) {
+    var dot = document.getElementById('status-dot');
+    dot.className = 'status-dot ' + state;
+    document.getElementById('status-text').textContent = text;
+  }
+
+  // ── Render ─────────────────────────────────────────────────────────────────
+
+  function renderOrders(orders) {
+    var grid = document.getElementById('orders-grid');
+    document.getElementById('queue-title').textContent =
+      orders.length ? 'Active Orders (' + orders.length + ')' : 'Active Orders';
+
+    if (!orders.length) {
+      grid.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">All caught up — no pending orders.</div></div>';
+      return;
+    }
+
+    // Build a map of existing cards so we only update what changed
+    var existing = {};
+    grid.querySelectorAll('[data-id]').forEach(function(el) {
+      existing[el.dataset.id] = el;
+    });
+
+    // Remove cards for orders no longer in the list
+    var currentIds = new Set(orders.map(function(o){ return o.id; }));
+    Object.keys(existing).forEach(function(id) {
+      if (!currentIds.has(id)) existing[id].remove();
+    });
+
+    // Add/update cards (prepend new ones)
+    orders.forEach(function(order) {
+      if (!existing[order.id]) {
+        var card = buildCard(order);
+        grid.insertBefore(card, grid.firstChild);
+      }
+    });
+  }
+
+  function buildCard(order) {
+    var isNew = !knownIds.has(order.id);
+    var div = document.createElement('div');
+    div.className = 'order-card' + (isNew ? ' is-new' : '');
+    div.dataset.id = order.id;
+
+    var time = new Date(order.ts).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+    var itemsHtml = order.items.map(function(it) {
+      return '<li>' +
+        '<span><span class="item-qty">' + it.qty + 'x</span>' + escHtml(it.name) + '</span>' +
+        '<span class="item-price">$' + (it.price * it.qty).toFixed(2) + '</span>' +
+        '</li>';
+    }).join('');
+
+    div.innerHTML =
+      '<div class="card-head">' +
+        '<span class="card-id">#' + escHtml(order.id) + '</span>' +
+        '<span class="card-type">' + (order.type === 'pickup' ? 'PICKUP' : 'DINE IN') + '</span>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-time">Ordered at ' + time + '</div>' +
+        '<ul class="card-items">' + itemsHtml + '</ul>' +
+        '<div class="card-total"><span>Total</span><span>$' + order.total.toFixed(2) + '</span></div>' +
+        (order.note ? '<div class="card-note">📝 ' + escHtml(order.note) + '</div>' : '') +
+      '</div>' +
+      '<div class="card-foot">' +
+        '<button class="btn-done" onclick="markDone(\'' + escHtml(order.id) + '\')">✓ Done</button>' +
+        '<button class="btn-reprint" onclick="printOrder(' + escHtml(JSON.stringify(order)) + ')">🖨</button>' +
+      '</div>';
+
+    return div;
+  }
+
+  // ── New order handling ─────────────────────────────────────────────────────
+
+  function handleNewOrders(orders) {
+    var fresh = orders.filter(function(o) { return !knownIds.has(o.id); });
+    fresh.forEach(function(o) { knownIds.add(o.id); });
+
+    if (!fresh.length) return;
+
+    if (cfg.sound) playAlert(fresh.length);
+    showToast('🔔 ' + fresh.length + ' new order' + (fresh.length > 1 ? 's' : '') + ' received!');
+
+    if (cfg.autoprint) {
+      fresh.forEach(function(o) { printQueue.push(o); });
+      processPrintQueue();
+    }
+  }
+
+  // ── Printing ───────────────────────────────────────────────────────────────
+
+  window.printOrder = function(order) {
+    printQueue.push(order);
+    processPrintQueue();
+  };
+
+  function processPrintQueue() {
+    if (printing || !printQueue.length) return;
+    printing = true;
+    var order = printQueue.shift();
+    renderPrintReceipt(order);
+    setTimeout(function() {
+      window.onafterprint = function() {
+        window.onafterprint = null;
+        printing = false;
+        processPrintQueue();
+      };
+      window.print();
+      // Fallback: if onafterprint doesn't fire (some browsers), release after 5s
+      setTimeout(function() {
+        if (printing) { printing = false; processPrintQueue(); }
+      }, 5000);
+    }, 300);
+  }
+
+  function renderPrintReceipt(order) {
+    var time = new Date(order.ts).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+    var itemsHtml = order.items.map(function(it) {
+      var name  = it.qty + 'x ' + it.name;
+      var price = '$' + (it.price * it.qty).toFixed(2);
+      // Pad to fill 72mm line (~30 chars)
+      var pad = Math.max(1, 30 - name.length - price.length);
+      return '<div class="pr-line"><span>' + escHtml(name) + '</span><span>' + price + '</span></div>';
+    }).join('');
+
+    document.getElementById('print-receipt').innerHTML =
+      '<div class="pr-center pr-bold" style="font-size:13pt;margin-bottom:1mm;">TRITTICO RISTORANTE</div>' +
+      '<div class="pr-center" style="font-size:9pt;margin-bottom:2mm;">154 Main South Rd, Hackham SA 5163</div>' +
+      '<hr class="pr-rule">' +
+      '<div class="pr-center pr-bold" style="font-size:12pt;letter-spacing:0.1em;margin-bottom:2mm;">' +
+        (order.type === 'pickup' ? '*** PICKUP ***' : '*** DINE IN ***') +
+      '</div>' +
+      '<div class="pr-center" style="font-size:9pt;margin-bottom:2mm;">Order #' + escHtml(order.id) + '  |  ' + time + '</div>' +
+      '<hr class="pr-rule">' +
+      itemsHtml +
+      '<div class="pr-total"><span>TOTAL</span><span>$' + order.total.toFixed(2) + '</span></div>' +
+      (order.note ? '<div class="pr-note">Note: ' + escHtml(order.note) + '</div>' : '') +
+      '<hr class="pr-rule">' +
+      '<div class="pr-footer">Thank you!</div>';
+  }
+
+  // ── Mark done ──────────────────────────────────────────────────────────────
+
+  window.markDone = function(id) {
+    if (!cfg.workerUrl) return;
+    var headers = { 'Content-Type': 'application/json' };
+    if (cfg.token) headers['Authorization'] = 'Bearer ' + cfg.token;
+
+    fetch(cfg.workerUrl + '/done', {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({ id: id }),
+    }).then(function() {
+      var card = document.querySelector('[data-id="' + id + '"]');
+      if (card) {
+        card.style.transition = 'opacity 0.3s';
+        card.style.opacity = '0';
+        setTimeout(function() { card.remove(); }, 300);
+      }
+      poll(); // Refresh immediately
+    }).catch(function(err) { console.error('Done error:', err); });
+  };
+
+  // ── Audio alert ────────────────────────────────────────────────────────────
+
+  function beep(freq, duration) {
+    try {
+      var ctx  = new (window.AudioContext || window.webkitAudioContext)();
+      var osc  = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq || 880;
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (duration || 0.2));
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + (duration || 0.2));
+    } catch(e) {}
+  }
+
+  function playAlert(count) {
+    var i = 0;
+    function next() {
+      if (i++ >= 3) return;
+      beep(880, 0.15);
+      setTimeout(next, 280);
+    }
+    next();
+  }
+
+  // ── Toast ──────────────────────────────────────────────────────────────────
+
+  function showToast(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(function() { el.classList.remove('show'); }, 3500);
+  }
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+
+  function escHtml(s) {
+    if (typeof s !== 'string') return String(s);
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── Boot ───────────────────────────────────────────────────────────────────
+
+  loadCfg();
+
+  if (!cfg.workerUrl) {
+    prefillWorkerUrl();
+    document.getElementById('setup-overlay').style.display = 'flex';
+  } else {
+    document.getElementById('setup-overlay').style.display = 'none';
+    document.getElementById('main-content').style.display  = 'block';
+    startPolling();
+  }
+
+  // Expose for settings button
+  window.openSetup = openSetup;
+  window.saveSetup = saveSetup;
+
+})();
+</script>
+</body>
+</html>
