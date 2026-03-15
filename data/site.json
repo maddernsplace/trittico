@@ -17,7 +17,7 @@
     "email": "info@tritticoristorante.com"
   },
   "stripe_link": "https://buy.stripe.com/YOUR_PAYMENT_LINK_ID",
-  "checkout_worker_url": "",
+  "checkout_worker_url": "trittico-checkout.maddernsplace.workers.dev",
   "ordering_enabled": true,
   "kitchen_email": "",
   "emailjs": {
