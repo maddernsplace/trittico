@@ -5,6 +5,7 @@
 
 var MENU_ITEMS = [];
 var STRIPE_LINK = 'https://buy.stripe.com/YOUR_PAYMENT_LINK_ID';
+var CHECKOUT_WORKER_URL = ''; // set from data/site.json
 var cart = {};
 var orderType = 'pickup';
 
@@ -169,7 +170,7 @@ function openModal() {
     (note ? '<p style="font-size:0.8rem;color:var(--muted);margin:0.5rem 0;font-style:italic;">Note: ' + note + '</p>' : '') +
     '<div class="modal-total"><span>Total</span><span class="modal-total-amount">' + fmt(total) + '</span></div>' +
     '<div class="modal-actions">' +
-      '<a href="' + STRIPE_LINK + '" target="_blank" rel="noopener" class="btn-primary" style="text-align:center;width:100%;">Pay Online via Stripe</a>' +
+      '<button id="pay-btn" class="btn-primary" style="width:100%;cursor:pointer;" onclick="goToCheckout()">Pay Online via Stripe</button>' +
       '<a href="tel:+61883813446" class="btn-outline" style="text-align:center;width:100%;">📞 Call to Order: (08) 8381 3446</a>' +
     '</div>' +
     '<p style="text-align:center;font-size:0.72rem;color:var(--muted);margin-top:0.75rem;">🔒 Payment processed securely via Stripe</p>';
@@ -177,6 +178,49 @@ function openModal() {
   document.getElementById('checkout-modal').classList.add('open');
 }
 window.openModal = openModal;
+
+// ---- Go to Stripe Checkout (via Worker if configured, fallback to link) ----
+function goToCheckout() {
+  var order = null;
+  try { order = JSON.parse(localStorage.getItem('tr_pending_order') || 'null'); } catch(e) {}
+  if (!order) return;
+
+  var payBtn = document.getElementById('pay-btn');
+
+  // If no Worker URL configured, fall back to static Stripe link
+  if (!CHECKOUT_WORKER_URL) {
+    window.open(STRIPE_LINK, '_blank');
+    return;
+  }
+
+  // Call Worker to create a real Stripe Checkout session
+  if (payBtn) { payBtn.disabled = true; payBtn.textContent = 'Redirecting to Stripe…'; }
+
+  fetch(CHECKOUT_WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      items:     order.items,
+      orderType: order.type,
+      note:      order.note,
+      orderId:   order.id
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.url) {
+      window.location.href = data.url; // redirect in same tab so Stripe can redirect back
+    } else {
+      throw new Error(data.error || 'No checkout URL returned');
+    }
+  })
+  .catch(function(err) {
+    if (payBtn) { payBtn.disabled = false; payBtn.textContent = 'Pay Online via Stripe'; }
+    alert('Could not connect to payment system. Please call us on (08) 8381 3446 or try again.');
+    console.error('Checkout error:', err);
+  });
+}
+window.goToCheckout = goToCheckout;
 
 function closeModal() { document.getElementById('checkout-modal').classList.remove('open'); }
 window.closeModal = closeModal;
@@ -205,6 +249,9 @@ document.addEventListener('DOMContentLoaded', function() {
     var siteData = results[1];
     if (siteData.stripe_link && siteData.stripe_link !== 'https://buy.stripe.com/YOUR_PAYMENT_LINK_ID') {
       STRIPE_LINK = siteData.stripe_link;
+    }
+    if (siteData.checkout_worker_url) {
+      CHECKOUT_WORKER_URL = siteData.checkout_worker_url;
     }
     if (siteData.ordering_enabled === false) {
       document.getElementById('items-grid').innerHTML =

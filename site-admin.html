@@ -181,11 +181,34 @@
         </div>
 
         <div class="a-card">
-          <div class="a-card-title">Stripe Payment Link</div>
+          <div class="a-card-title">Checkout Worker URL <span style="font-size:0.7rem;background:rgba(62,207,142,0.15);color:#3ecf8e;padding:0.1rem 0.5rem;border-radius:3px;margin-left:0.4rem;">Recommended</span></div>
           <p style="color:var(--a-muted);font-size:0.82rem;margin-bottom:0.75rem;">
-            Create a Payment Link at
-            <a href="https://dashboard.stripe.com/payment-links" target="_blank" rel="noopener" style="color:var(--a-gold);">dashboard.stripe.com/payment-links</a>
-            then paste the URL here.
+            Your Cloudflare Worker URL. When set, Stripe receives the actual items ordered (itemised receipt, correct amount).
+            Deploy the Worker from <code style="color:var(--a-gold);">worker/checkout.js</code> in your repo.
+            See setup instructions below.
+          </p>
+          <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">
+            <input class="form-input" id="worker-url-input" type="url" placeholder="https://trittico-checkout.yourname.workers.dev" style="flex:1;" />
+            <button class="btn-primary-a" id="btn-save-worker-url">Save</button>
+          </div>
+          <details style="margin-top:0.5rem;">
+            <summary style="font-size:0.78rem;color:var(--a-muted);cursor:pointer;">How to deploy the Worker (3 steps)</summary>
+            <div style="margin-top:0.75rem;font-size:0.8rem;color:var(--a-muted);line-height:1.8;">
+              <strong style="color:var(--a-text);">1.</strong> Sign up free at
+              <a href="https://dash.cloudflare.com/sign-up/workers-and-pages" target="_blank" rel="noopener" style="color:var(--a-gold);">cloudflare.com</a><br>
+              <strong style="color:var(--a-text);">2.</strong> In your terminal, run:<br>
+              <code style="background:var(--a-bg);padding:0.3rem 0.6rem;border-radius:3px;display:block;margin:0.3rem 0;">cd worker &amp;&amp; npx wrangler deploy</code>
+              <code style="background:var(--a-bg);padding:0.3rem 0.6rem;border-radius:3px;display:block;margin:0.3rem 0;">npx wrangler secret put STRIPE_SECRET_KEY</code>
+              <em>(paste your Stripe secret key — starts with sk_live_ or sk_test_)</em><br>
+              <strong style="color:var(--a-text);">3.</strong> Copy the Worker URL from the deploy output and paste it above.
+            </div>
+          </details>
+        </div>
+
+        <div class="a-card">
+          <div class="a-card-title">Stripe Payment Link <span style="font-size:0.7rem;background:rgba(240,180,41,0.15);color:#f0b429;padding:0.1rem 0.5rem;border-radius:3px;margin-left:0.4rem;">Fallback</span></div>
+          <p style="color:var(--a-muted);font-size:0.82rem;margin-bottom:0.75rem;">
+            Used only if the Checkout Worker is not set up. Stripe won't know the order details.
           </p>
           <div style="display:flex;gap:0.5rem;">
             <input class="form-input" id="stripe-link-input" type="url" placeholder="https://buy.stripe.com/…" style="flex:1;" />
