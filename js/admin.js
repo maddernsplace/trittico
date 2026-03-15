@@ -56,9 +56,9 @@
 
   // ── GitHub API ───────────────────────────────────────────
   async function ghGet(path) {
-    const res = await fetch('https://api.github.com/repos/' + REPO + '/contents/' + path + '?ref=' + BRANCH, {
-      headers: { 'Authorization': 'Bearer ' + ghToken, 'Accept': 'application/vnd.github+json' }
-    });
+    const headers = { 'Accept': 'application/vnd.github+json' };
+    if (ghToken) headers['Authorization'] = 'Bearer ' + ghToken;
+    const res = await fetch('https://api.github.com/repos/' + REPO + '/contents/' + path + '?ref=' + BRANCH, { headers });
     if (!res.ok) throw new Error('GitHub fetch failed: ' + res.status);
     return res.json();
   }
@@ -90,16 +90,18 @@
     return res.json();
   }
 
-  // ── Load data from GitHub ────────────────────────────────
+  // ── Load data directly from the live site files ─────────
   async function loadData() {
     setSaveStatus('saving', 'Loading...');
     try {
-      const [menuFile, siteFile] = await Promise.all([
-        ghGet('data/menu.json'),
-        ghGet('data/site.json')
+      const [menuRes, siteRes] = await Promise.all([
+        fetch('data/menu.json?_=' + Date.now()),
+        fetch('data/site.json?_=' + Date.now())
       ]);
-      menuItems = JSON.parse(atob(menuFile.content.replace(/\n/g, '')));
-      siteData  = JSON.parse(atob(siteFile.content.replace(/\n/g, '')));
+      if (!menuRes.ok) throw new Error('data/menu.json not found (' + menuRes.status + ')');
+      if (!siteRes.ok) throw new Error('data/site.json not found (' + siteRes.status + ')');
+      menuItems = await menuRes.json();
+      siteData  = await siteRes.json();
       setSaveStatus('', '');
       renderAll();
     } catch(e) {
@@ -110,11 +112,12 @@
 
   // ── Save menu.json ───────────────────────────────────────
   async function saveMenu(msg) {
+    if (!ghToken) { toast('No GitHub token set — go to Settings tab to add one', 'error'); return; }
     setSaveStatus('saving', 'Saving...');
     try {
       await ghPut('data/menu.json', JSON.stringify(menuItems, null, 2), msg || 'Update menu via admin panel');
       setSaveStatus('saved', 'Saved ✓');
-      toast('Menu saved and deploying…', 'success');
+      toast('Menu saved — deploying in ~1 min', 'success');
       setTimeout(function() { setSaveStatus('', ''); }, 4000);
     } catch(e) {
       setSaveStatus('error', 'Save failed');
@@ -124,11 +127,12 @@
 
   // ── Save site.json ───────────────────────────────────────
   async function saveSite(msg) {
+    if (!ghToken) { toast('No GitHub token set — go to Settings tab to add one', 'error'); return; }
     setSaveStatus('saving', 'Saving...');
     try {
       await ghPut('data/site.json', JSON.stringify(siteData, null, 2), msg || 'Update site config via admin panel');
       setSaveStatus('saved', 'Saved ✓');
-      toast('Saved and deploying…', 'success');
+      toast('Saved — deploying in ~1 min', 'success');
       setTimeout(function() { setSaveStatus('', ''); }, 4000);
     } catch(e) {
       setSaveStatus('error', 'Save failed');
